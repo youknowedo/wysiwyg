@@ -5,6 +5,7 @@
     }
   },
   "routes": [
-    { "src": "^/(?!public/)(.*)",  "dest": "/api/router.php" }
+    { "src": "^/(?!public/)(.*)",  "dest": "/api/router.php" },
+    { "src": "^/public/(.*)" }
   ]
 }
