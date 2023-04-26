@@ -1,0 +1,18 @@
+[
+    {
+        "slug": "/home",
+        "body": {
+            "children": [
+                {
+                    "type": "div",
+                    "children": [
+                        {
+                            "type": "p",
+                            "children": ["Hej"]
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+]
