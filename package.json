@@ -7,5 +7,8 @@
         "dev": "nodemon --watch \"src/**/*\" -e \"ts\" --exec \"npm run build\""
     },
     "author": "",
-    "license": "MIT"
+    "license": "MIT",
+    "devDependencies": {
+        "typescript": "^5.0.4"
+    }
 }
