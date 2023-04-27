@@ -95,5 +95,5 @@ export const elementToHtml = (element: PageElement): string => {
 
     const wysiwygMenu = '<span class="menu"></span>';
 
-    return `<${element.type} ${attributes} wysiwyg>${wysiwygMenu}${children}</${element.type}>`;
+    return `<${element.type} ${attributes} wysiwyg >${wysiwygMenu}${children}</${element.type}>`;
 };
