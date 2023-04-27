@@ -6,8 +6,5 @@
         "dev": "nodemon --watch \"src/**/*\" -e \"ts\" --exec \"tsc\""
     },
     "author": "",
-    "license": "MIT",
-    "devDependencies": {
-        "typescript": "^5.0.4"
-    }
+    "license": "MIT"
 }
