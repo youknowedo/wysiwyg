@@ -1,6 +1,7 @@
 {
     "scripts": {
         "vercel": [
+            "npm i",
             "tsc"
         ]
     }
