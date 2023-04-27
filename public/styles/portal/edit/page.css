@@ -8,13 +8,14 @@
 [wysiwyg] {
     position: relative;
 }
-[wysiwyg] > .menu {
+[wysiwyg]::before {
+    content: "";
     display: inline-block;
     position: absolute;
     height: 100%;
     width: 100%;
 }
-[wysiwyg] > .menu:hover {
+[wysiwyg]:hover::before {
     pointer-events: none;
     border: 2px solid var(--purple);
     margin: -2px;

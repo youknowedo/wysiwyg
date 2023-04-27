@@ -5,11 +5,11 @@ export type Page = {
 export type PageElement<T = unknown> =
     | {
           type: "div" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "p" | string;
-          attributes: {
+          attributes?: {
               id?: string;
               [key: string]: string | undefined;
           };
-          children: PageElement[];
+          children?: PageElement[];
       }
     | string;
 
@@ -89,11 +89,11 @@ export const elementToHtml = (element: PageElement): string => {
     }
 
     let children = "";
-    for (const child of element.children) {
-        children += elementToHtml(child);
+    if (element.children) {
+        for (const child of element.children) {
+            children += elementToHtml(child);
+        }
     }
 
-    const wysiwygMenu = '<span class="menu"></span>';
-
-    return `<${element.type} ${attributes} wysiwyg >${wysiwygMenu}${children}</${element.type}>`;
+    return `<${element.type} ${attributes} wysiwyg>${children}</${element.type}>`;
 };
