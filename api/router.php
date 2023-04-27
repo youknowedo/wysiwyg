@@ -4,9 +4,9 @@ $path = $_SERVER['REQUEST_URI'];
 str_ends_with($path, "/") && $path = substr($path, 0, -1);
 ($path == "/") && $path = "/home";
 
-$public_path = dirname(__DIR__, 1) . "/public" . $path;
+$static_path = dirname(__DIR__, 1) . "/static" . $path;
 
-$db_file = "../public/temp_database.json";
+$db_file = "../static/temp_database.json";
 $db = json_decode(file_get_contents($db_file), true);
 
 function renderPage($db, $path)
@@ -27,22 +27,22 @@ function renderPage($db, $path)
     echo $page;
 }
 
-if (file_exists($public_path)) {
-    if (str_ends_with($public_path, ".jfif") || str_ends_with($public_path, ".jpg") || str_ends_with($public_path, ".jpeg"))
+if (file_exists($static_path)) {
+    if (str_ends_with($static_path, ".jfif") || str_ends_with($static_path, ".jpg") || str_ends_with($static_path, ".jpeg"))
         $content_type = "image/jpeg";
-    if (str_ends_with($public_path, ".png"))
+    if (str_ends_with($static_path, ".png"))
         $content_type = "image/png";
-    if (str_ends_with($public_path, ".json"))
+    if (str_ends_with($static_path, ".json"))
         $content_type = "text/plain";
-    if (str_ends_with($public_path, ".js"))
+    if (str_ends_with($static_path, ".js"))
         $content_type = "text/javascript";
-    if (str_ends_with($public_path, ".css"))
+    if (str_ends_with($static_path, ".css"))
         $content_type = "text/css";
 
     if ($content_type != null) {
         header("Content-type:" . $content_type . ";");
     }
-    readfile($public_path);
+    readfile($static_path);
     die();
 }
 
