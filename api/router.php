@@ -31,14 +31,18 @@ function renderPage($db, $path)
 if (file_exists($public_path)) {
     if (str_ends_with($public_path, ".jfif") || str_ends_with($public_path, ".jpg") || str_ends_with($public_path, ".jpeg"))
         $content_type = "image/jpeg";
-    if (str_ends_with($public_path, ".png"))
+    else if (str_ends_with($public_path, ".png"))
         $content_type = "image/png";
-    if (str_ends_with($public_path, ".json"))
+    else if (str_ends_with($public_path, ".json"))
         $content_type = "text/plain";
-    if (str_ends_with($public_path, ".js"))
+    else if (str_ends_with($public_path, ".js"))
         $content_type = "text/javascript";
-    if (str_ends_with($public_path, ".css"))
+    else if (str_ends_with($public_path, ".css"))
         $content_type = "text/css";
+    else {
+        http_response_code(501);
+        die();
+    }
 
     if ($content_type != null) {
         header("Content-type:" . $content_type . ";");
@@ -48,15 +52,7 @@ if (file_exists($public_path)) {
 }
 
 if (str_starts_with($path, "/portal")) {
-    if ($path == "/portal/edit") {
-        header("Location:edit/home");
-        die();
-    }
-
-    if (str_starts_with($path, "/portal/edit"))
-        include "portal/edit.php";
-
-    include "portal/styles.php";
+    include "portal/index.php";
 } else {
     renderPage($db, $path);
 }

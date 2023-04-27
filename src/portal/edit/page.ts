@@ -64,36 +64,47 @@ export const nodeToPageElement = (
     };
 };
 
-export const pageToHtml = (page: Page): string => {
-    let html = "";
+export const pageToHtml = (page: Page, chosenElement?: PageElement): Node[] => {
+    let body = document.createElement("body");
 
     for (const element of page.body) {
-        html += elementToHtml(element);
+        body.appendChild(elementToHtml(element, chosenElement));
+    }
+
+    const html: Node[] = [];
+    for (const child of body.childNodes) {
+        html.push(child);
     }
 
     return html;
 };
 
-export const elementToHtml = (element: PageElement): string => {
-    if (typeof element == "string") return element;
+export const elementToHtml = (
+    element: PageElement,
+    chosenElement?: PageElement
+): ChildNode => {
+    if (typeof element == "string") return document.createTextNode(element);
 
-    let attributes = "";
+    const node = document.createElement(element.type);
+
     for (const attribute in element.attributes) {
         if (
             Object.prototype.hasOwnProperty.call(element.attributes, attribute)
         ) {
             const value = element.attributes[attribute];
 
-            attributes += `${attribute}="${value}" `;
+            node.setAttribute(attribute, value ?? "");
         }
     }
+    node.setAttribute("wysiwyg", "");
 
-    let children = "";
+    if (element == chosenElement) node.classList.add("chosen");
+
     if (element.children) {
         for (const child of element.children) {
-            children += elementToHtml(child);
+            node.appendChild(elementToHtml(child, chosenElement));
         }
     }
 
-    return `<${element.type} ${attributes} wysiwyg>${children}</${element.type}>`;
+    return node;
 };

@@ -15,7 +15,8 @@
     height: 100%;
     width: 100%;
 }
-[wysiwyg]:hover::before {
+[wysiwyg]:hover::before,
+[wysiwyg].chosen::before {
     pointer-events: none;
     border: 2px solid var(--purple);
     margin: -2px;
