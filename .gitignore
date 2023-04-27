@@ -1,4 +1,4 @@
 package-lock.json
-static/src
+public/src
 node_modules/
 .vercel

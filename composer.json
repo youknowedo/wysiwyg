@@ -1,7 +1,7 @@
 {
     "scripts": {
         "vercel": [
-            "npm i && tsc -V"
+            "npm i && npx tsc"
         ]
     }
 }
