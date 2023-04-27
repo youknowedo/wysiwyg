@@ -9,12 +9,13 @@
     position: relative;
 }
 [wysiwyg] > .menu {
-    display: block;
+    display: inline-block;
     position: absolute;
     height: 100%;
     width: 100%;
 }
 [wysiwyg] > .menu:hover {
+    pointer-events: none;
     border: 2px solid var(--purple);
     margin: -2px;
 }
