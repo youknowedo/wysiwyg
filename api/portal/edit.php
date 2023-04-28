@@ -27,7 +27,7 @@ if ($method == "POST") {
         <div id="tools">
             <div class="left"></div>
             <div class="right">
-                <button id="saveButton">Save</button>
+                <button id="saveButton">Sav</button>
             </div>
         </div>
         <div id="modeSelector"></div>

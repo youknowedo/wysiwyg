@@ -116,17 +116,21 @@ const generateIFrame = () => {
 
 generateHierarchy();
 
-const saveButton = document.getElementById("saveButton");
+const saveButton = document.getElementById(
+    "saveButton"
+) as HTMLButtonElement | null;
 if (saveButton)
-    saveButton.onclick = (e) => {
+    saveButton.onclick = async (e) => {
         e.preventDefault();
-        console.log("saving");
+        saveButton.disabled = true;
 
         const body = document.createElement("body");
         body.append(...pageToHtml(page));
 
-        fetch(window.location.pathname, {
+        await fetch(window.location.pathname, {
             method: "POST",
             body: body.innerHTML,
         });
+
+        saveButton.disabled = false;
     };
