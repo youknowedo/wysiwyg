@@ -2,7 +2,9 @@
 $path = $_SERVER['REQUEST_URI'];
 
 str_ends_with($path, "/") && $path = substr($path, 0, -1);
-($path == "/") && $path = "/home";
+
+if ($path == "")
+    $path = "/home";
 
 $public_dir = dirname(__DIR__, 1) . "/public";
 $public_path = $public_dir . $path;
