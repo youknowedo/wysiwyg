@@ -3,6 +3,7 @@ import { PageElement, htmlToPage, pageToHtml, type Page } from "./page.js";
 
 const db = await fetch("/temp_database.json").then((res) => res.json());
 const slugs = window.location.pathname.split("/");
+slugs[slugs.length - 1] == "" && slugs.pop();
 const slug = slugs[slugs.length - 1];
 
 const iframe = document.getElementById("page") as HTMLIFrameElement;
