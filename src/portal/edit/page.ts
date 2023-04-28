@@ -1,99 +1,104 @@
+import {
+    PageElementTextTag,
+    PageElementTypes,
+    elementIsContainer,
+    elementIsText,
+} from "./elements.js";
+
 export type Page = {
     body: PageElement[];
 };
 
-export type PageElement<T = unknown> =
-    | {
-          type: "div" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "p" | string;
-          attributes: {
-              id?: string;
-              [key: string]: string | undefined;
-          };
-          children: PageElement[];
-      }
-    | string;
+export type PageElement<K extends keyof PageElementTypes = any> = {
+    type: K;
+} & PageElementTypes[K];
 
 export const htmlToPage = (html: string): Page => {
     const body: PageElement[] = [];
 
-    const HtmlBody = document.createElement("body");
-    HtmlBody.innerHTML = html;
-    HtmlBody.childNodes.forEach((node, i) => {
-        body.push(
-            nodeToPageElement(
-                node.nodeType == 1 && node.parentElement
-                    ? node.parentElement.children[i]
-                    : node
-            )
-        );
-    });
+    const htmlBody = document.createElement("body");
+    htmlBody.innerHTML = html;
+
+    for (const child of htmlBody.children) {
+        body.push(htmlToPageElement(child));
+    }
 
     return {
         body,
     };
 };
 
-export const isElement = (maybeElement: any): maybeElement is HTMLElement =>
-    maybeElement.attributes != undefined;
+export const htmlToPageElement = (html: Element): PageElement => {
+    const type = html.attributes.getNamedItem("wysiwyg")
+        ?.value as keyof PageElementTypes;
 
-export const nodeToPageElement = (
-    node: ChildNode | HTMLElement
-): PageElement => {
-    if (!isElement(node)) return node.nodeValue ?? "";
-    const children: PageElement[] = [];
+    if (type == "text") {
+        const element: PageElement<"text"> = {
+            type,
+            id: html.id,
+            tag: html.tagName.toLowerCase() as PageElementTextTag,
+            value: html.innerHTML,
+        };
 
-    let attributes: { [key: string]: string } = {};
-    for (let attribute, i = 0, n = node.attributes.length; i < n; i++) {
-        attribute = node.attributes[i];
+        return element;
+    } else if (type == "container") {
+        const children: PageElement[] = [];
 
-        attributes[attribute.nodeName] = attribute.value;
+        for (const child of html.children) {
+            children.push(htmlToPageElement(child));
+        }
+
+        const element: PageElement<"container"> = {
+            type,
+            id: html.id,
+            children,
+        };
+
+        return element;
     }
-    let numOfNonElements = 0;
-    node.childNodes.forEach((child, i) => {
-        const childNode =
-            child.nodeType == 1 && child.parentElement && numOfNonElements++
-                ? child.parentElement.children[i - numOfNonElements]
-                : child;
-        children.push(nodeToPageElement(childNode));
-    });
-
-    return {
-        type: node.nodeName.toLowerCase(),
-        attributes,
-        children,
-    };
 };
 
-export const pageToHtml = (page: Page): string => {
-    let html = "";
+export const pageToHtml = (page: Page, chosenElement?: PageElement): Node[] => {
+    let body = document.createElement("body");
 
     for (const element of page.body) {
-        html += elementToHtml(element);
+        body.appendChild(elementToHtml(element, chosenElement));
+    }
+
+    const html: Node[] = [];
+    for (const child of body.childNodes) {
+        html.push(child);
     }
 
     return html;
 };
 
-export const elementToHtml = (element: PageElement): string => {
-    if (typeof element == "string") return element;
+export const elementToHtml = <K extends keyof PageElementTypes>(
+    element: PageElement<K>,
+    chosenElement?: PageElement<K>
+): ChildNode => {
+    if (element.type == "text" && elementIsText(element)) {
+        const html = document.createElement(element.tag);
+        html.id = element.id;
+        html.innerHTML = element.value;
+        html.setAttribute("wysiwyg", element.type);
 
-    let attributes = "";
-    for (const attribute in element.attributes) {
-        if (
-            Object.prototype.hasOwnProperty.call(element.attributes, attribute)
-        ) {
-            const value = element.attributes[attribute];
+        if (element == chosenElement) html.classList.add("chosen");
 
-            attributes += `${attribute}="${value}" `;
+        return html;
+    } else if (element.type == "container" && elementIsContainer(element)) {
+        const html = document.createElement("div");
+        html.id = element.id;
+        html.setAttribute("wysiwyg", element.type);
+
+        if (element == chosenElement) html.classList.add("chosen");
+
+        for (const child of element.children) {
+            html.appendChild(elementToHtml(child, chosenElement));
         }
+
+        return html;
+    } else {
+        throw new Error("Element type wasn't recognized.");
     }
-
-    let children = "";
-    for (const child of element.children) {
-        children += elementToHtml(child);
-    }
-
-    const wysiwygMenu = '<span class="menu"></span>';
-
-    return `<${element.type} ${attributes} wysiwyg >${wysiwygMenu}${children}</${element.type}>`;
 };
