@@ -1,3 +1,4 @@
+import { PageElementTypes, elementIsContainer } from "./elements.js";
 import { PageElement, htmlToPage, pageToHtml, type Page } from "./page.js";
 
 const db = await fetch("/temp_database.json").then((res) => res.json());
@@ -7,11 +8,14 @@ const page = htmlToPage(db.home);
 
 let chosenElement: PageElement | undefined = undefined;
 
-const generateHierarchyElement = (element: PageElement, level = 0) => {
+const generateHierarchyElement = <K extends keyof PageElementTypes>(
+    element: PageElement<K>,
+    level = 0
+) => {
     const wrapper = document.createElement("div");
 
     const text = wrapper.appendChild(document.createElement("span"));
-    text.innerText = typeof element == "string" ? "Text" : element.type;
+    text.innerText = element.type;
     if (element == chosenElement) text.classList.add("chosen");
     text.onclick = (e) => {
         e.preventDefault();
@@ -21,8 +25,7 @@ const generateHierarchyElement = (element: PageElement, level = 0) => {
         generateHierarchy();
     };
 
-    wrapper.classList.add(`${level}`);
-    if (typeof element != "string") {
+    if (element.type == "container" && elementIsContainer(element)) {
         wrapper.classList.add("isElement");
 
         if (!element.children) element.children = [];
@@ -39,9 +42,10 @@ const generateHierarchyElement = (element: PageElement, level = 0) => {
 
             if (!element.children) element.children = [];
             element.children.push({
-                type: "div",
-                attributes: {},
-            });
+                id: "",
+                type: "container",
+                children: [],
+            } as PageElement<"container">);
 
             generateHierarchy();
         };
@@ -57,6 +61,8 @@ if (hierarchy)
         if (e.currentTarget != e.target) return;
 
         chosenElement = undefined;
+
+        generateHierarchy();
     };
 const generateHierarchy = () => {
     if (!hierarchy) throw new Error("Hierarchy doesn't exist");

@@ -45,7 +45,7 @@
 #left div.isElement::after {
     content: "";
     position: absolute;
-    top: 2.5rem;
+    top: 2.25rem;
     bottom: 0;
     left: 1rem;
     width: 0.25rem;
@@ -78,7 +78,8 @@
 
 #left span {
     display: block;
-    width: 3rem;
+    width: 4rem;
+    font-size: 0.75rem;
     background-color: var(--light-grey);
     padding: 0.5rem 0.75rem;
     border-radius: 4px;
