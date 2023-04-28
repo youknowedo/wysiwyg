@@ -36,12 +36,12 @@ if ($method == "POST") {
     <script type="module" src="/src/portal/edit/edit.js"></script>
 
     <div id="editor">
-        <div id="left" class="menu"></div>
+        <div class="left menu"></div>
 
         <div>
             <iframe id="page"></iframe>
         </div>
 
-        <div id="right" class="menu"></div>
+        <div class="right menu"></div>
     </div>
 <?php endif; ?>

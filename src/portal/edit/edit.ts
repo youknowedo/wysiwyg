@@ -13,6 +13,8 @@ const generateHierarchyElement = <K extends keyof PageElementTypes>(
     level = 0
 ) => {
     const wrapper = document.createElement("div");
+    wrapper.setAttribute("wysiwyg", element.type);
+    wrapper.classList.add("isElement");
 
     const text = wrapper.appendChild(document.createElement("span"));
     text.innerText = element.type;
@@ -25,9 +27,7 @@ const generateHierarchyElement = <K extends keyof PageElementTypes>(
         generateHierarchy();
     };
 
-    if (element.type == "container" && elementIsContainer(element)) {
-        wrapper.classList.add("isElement");
-
+    if (elementIsContainer(element)) {
         if (!element.children) element.children = [];
 
         for (const child of element.children) {
@@ -54,7 +54,7 @@ const generateHierarchyElement = <K extends keyof PageElementTypes>(
     return wrapper;
 };
 
-const hierarchy = document.getElementById("left");
+const hierarchy = document.querySelector<HTMLElement>("#editor>div.left");
 if (hierarchy)
     hierarchy.onclick = (e) => {
         e.preventDefault();
@@ -68,9 +68,31 @@ const generateHierarchy = () => {
     if (!hierarchy) throw new Error("Hierarchy doesn't exist");
 
     hierarchy.innerHTML = "";
+
+    const wrapper = hierarchy.appendChild(document.createElement("div"));
+    wrapper.setAttribute("wysiwyg", "container");
+
+    const text = wrapper.appendChild(document.createElement("span"));
+    text.innerText = "Home";
+
     for (const element of page.body) {
-        hierarchy.appendChild(generateHierarchyElement(element, 0));
+        wrapper.appendChild(generateHierarchyElement(element, 0));
     }
+
+    const newButton = wrapper.appendChild(document.createElement("button"));
+    newButton.innerText = "+";
+    newButton.classList.add("newButton");
+    newButton.onclick = (e) => {
+        e.preventDefault();
+
+        page.body.push({
+            id: "",
+            type: "container",
+            children: [],
+        } as PageElement<"container">);
+
+        generateHierarchy();
+    };
 
     generateIFrame();
 };

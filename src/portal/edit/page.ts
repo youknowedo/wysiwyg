@@ -77,7 +77,7 @@ export const elementToHtml = <K extends keyof PageElementTypes>(
     element: PageElement<K>,
     chosenElement?: PageElement<K>
 ): ChildNode => {
-    if (element.type == "text" && elementIsText(element)) {
+    if (elementIsText(element)) {
         const html = document.createElement(element.tag);
         html.id = element.id;
         html.innerHTML = element.value;
@@ -92,7 +92,7 @@ export const elementToHtml = <K extends keyof PageElementTypes>(
         }
 
         return html;
-    } else if (element.type == "container" && elementIsContainer(element)) {
+    } else if (elementIsContainer(element)) {
         const html = document.createElement("div");
         html.id = element.id;
         html.setAttribute("wysiwyg", element.type);

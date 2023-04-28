@@ -25,24 +25,24 @@
     background-color: var(--dark);
 }
 
-#left {
+#editor > .left {
     color: white;
 }
 
-#left div {
+#editor > .left div {
     padding: 0 0.5rem;
     margin-top: 0.25rem;
     margin-left: 0.5rem;
     display: inline-block;
 }
 
-#left div.isElement {
+#editor > .left div[wysiwyg="container"] {
     position: relative;
     padding-bottom: 1rem;
     margin-bottom: 0.5rem;
 }
 
-#left div.isElement::after {
+#editor > .left div[wysiwyg="container"]::after {
     content: "";
     position: absolute;
     top: 2.25rem;
@@ -54,7 +54,7 @@
     border-bottom: 1px solid rgba(255, 255, 255, 0.25);
 }
 
-#left div.isElement .newButton {
+#editor > .left div[wysiwyg="container"] .newButton {
     position: absolute;
     bottom: 0;
     left: 1.5rem;
@@ -71,12 +71,12 @@
     border: 0;
 }
 
-#left div.isElement .newButton:hover {
+#editor > .left div[wysiwyg="container"] .newButton:hover {
     color: white;
     cursor: pointer;
 }
 
-#left span {
+#editor > .left div > span {
     display: block;
     width: 4rem;
     font-size: 0.75rem;
@@ -84,8 +84,14 @@
     padding: 0.5rem 0.75rem;
     border-radius: 4px;
 }
+#editor > .left div.isElement > span {
+    cursor: pointer;
+}
+#editor > .left div:not(.isElement) > span {
+    cursor: default;
+}
 
-#left span.chosen {
+#editor > .left span.chosen {
     background-color: var(--purple);
 }
 div:has(> #page) {
