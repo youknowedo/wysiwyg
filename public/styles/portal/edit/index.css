@@ -104,20 +104,23 @@
     display: block;
     width: 4rem;
     font-size: 0.75rem;
-    background-color: var(--light-grey);
+    background-color: var(--grey);
     padding: 0.5rem 0.75rem;
     border-radius: 4px;
 }
 #editor > .left div.isElement > span {
     cursor: pointer;
 }
+#editor > .left div.isElement > span:not(.chosen):hover {
+    background-color: var(--light-grey);
+}
 #editor > .left div:not(.isElement) > span {
     cursor: default;
 }
-
 #editor > .left span.chosen {
     background-color: var(--purple);
 }
+
 div:has(> #page) {
     padding: 1rem;
     display: flex;

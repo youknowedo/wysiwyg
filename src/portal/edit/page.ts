@@ -1,4 +1,11 @@
 import {
+    chosenElement,
+    generateHierarchy,
+    hoverElement,
+    setChosenElement,
+    setHoverElement,
+} from "./edit.js";
+import {
     PageElementTextTag,
     PageElementTypes,
     elementIsContainer,
@@ -58,11 +65,11 @@ export const htmlToPageElement = (html: Element): PageElement => {
     }
 };
 
-export const pageToHtml = (page: Page, chosenElement?: PageElement): Node[] => {
+export const pageToHtml = (page: Page): Node[] => {
     let body = document.createElement("body");
 
     for (const element of page.body) {
-        body.appendChild(elementToHtml(element, chosenElement));
+        body.appendChild(elementToHtml(element));
     }
 
     const html: Node[] = [];
@@ -74,19 +81,27 @@ export const pageToHtml = (page: Page, chosenElement?: PageElement): Node[] => {
 };
 
 export const elementToHtml = <K extends keyof PageElementTypes>(
-    element: PageElement<K>,
-    chosenElement?: PageElement<K>
+    element: PageElement<K>
 ): ChildNode => {
     if (elementIsText(element)) {
         const html = document.createElement(element.tag);
         html.id = element.id;
         html.innerHTML = element.value;
         html.setAttribute("wysiwyg", element.type);
+        if (hoverElement == element) html.classList.add("hover");
+        html.onclick = (e) => {
+            e.preventDefault();
+            if (chosenElement == element) return;
+
+            setChosenElement(element);
+
+            generateHierarchy();
+        };
 
         if (element == chosenElement) {
             html.classList.add("chosen");
-            html.setAttribute("contenteditable", "true");
-            html.oninput = (e) => {
+            html.setAttribute("contenteditable", "");
+            html.oninput = () => {
                 element.value = html.innerHTML;
             };
         }
@@ -96,11 +111,21 @@ export const elementToHtml = <K extends keyof PageElementTypes>(
         const html = document.createElement("div");
         html.id = element.id;
         html.setAttribute("wysiwyg", element.type);
+        if (hoverElement == element) html.classList.add("hover");
+        html.onclick = (e) => {
+            e.preventDefault();
+            if (e.currentTarget != e.target) return;
+            if (chosenElement == element) return;
+
+            setChosenElement(element);
+
+            generateHierarchy();
+        };
 
         if (element == chosenElement) html.classList.add("chosen");
 
         for (const child of element.children) {
-            html.appendChild(elementToHtml(child, chosenElement));
+            html.appendChild(elementToHtml(child));
         }
 
         return html;

@@ -9,7 +9,12 @@ const slug = slugs[slugs.length - 1];
 const iframe = document.getElementById("page") as HTMLIFrameElement;
 const page = htmlToPage(db[slug]);
 
-let chosenElement: PageElement | undefined = undefined;
+export let chosenElement: PageElement | undefined = undefined;
+export const setChosenElement = (e: PageElement | undefined) =>
+    (chosenElement = e);
+export let hoverElement: PageElement | undefined = undefined;
+export const setHoverElement = (e: PageElement | undefined) =>
+    (hoverElement = e);
 
 const generateHierarchyElement = <K extends keyof PageElementTypes>(
     element: PageElement<K>,
@@ -26,6 +31,22 @@ const generateHierarchyElement = <K extends keyof PageElementTypes>(
         e.preventDefault();
 
         chosenElement = element;
+
+        generateHierarchy();
+    };
+    text.onmouseenter = (e) => {
+        e.preventDefault();
+        if (e.currentTarget != e.target) return;
+        if (hoverElement == element) return;
+
+        hoverElement = element;
+
+        generateHierarchy();
+    };
+    text.onmouseleave = (e) => {
+        e.preventDefault();
+        if (e.currentTarget != e.target) return;
+        hoverElement = undefined;
 
         generateHierarchy();
     };
@@ -67,7 +88,7 @@ if (hierarchy)
 
         generateHierarchy();
     };
-const generateHierarchy = () => {
+export const generateHierarchy = () => {
     if (!hierarchy) throw new Error("Hierarchy doesn't exist");
 
     hierarchy.innerHTML = "";
@@ -105,7 +126,14 @@ const generateIFrame = () => {
     if (!doc) throw new Error("iframe missing doc");
 
     doc.body.innerHTML = "";
-    doc.body.append(...pageToHtml(page, chosenElement));
+    doc.body.append(...pageToHtml(page));
+    doc.body.onclick = (e) => {
+        if (e.currentTarget != e.target) return;
+
+        chosenElement = undefined;
+
+        generateHierarchy();
+    };
 
     const css = doc.createElement("link");
     css.href = "/styles/portal/edit/iframe.css";
