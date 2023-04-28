@@ -90,3 +90,18 @@ const generateIFrame = () => {
 };
 
 generateHierarchy();
+
+const saveButton = document.getElementById("saveButton");
+if (saveButton)
+    saveButton.onclick = (e) => {
+        e.preventDefault();
+        console.log("saving");
+
+        const body = document.createElement("body");
+        body.append(...pageToHtml(page));
+
+        fetch("/portal/edit/home", {
+            method: "POST",
+            body: body.innerHTML,
+        });
+    };

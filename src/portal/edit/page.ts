@@ -83,7 +83,13 @@ export const elementToHtml = <K extends keyof PageElementTypes>(
         html.innerHTML = element.value;
         html.setAttribute("wysiwyg", element.type);
 
-        if (element == chosenElement) html.classList.add("chosen");
+        if (element == chosenElement) {
+            html.classList.add("chosen");
+            html.setAttribute("contenteditable", "true");
+            html.oninput = (e) => {
+                element.value = html.innerHTML;
+            };
+        }
 
         return html;
     } else if (element.type == "container" && elementIsContainer(element)) {
