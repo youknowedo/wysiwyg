@@ -2,9 +2,11 @@ import { PageElementTypes, elementIsContainer } from "./elements.js";
 import { PageElement, htmlToPage, pageToHtml, type Page } from "./page.js";
 
 const db = await fetch("/temp_database.json").then((res) => res.json());
+const slugs = window.location.pathname.split("/");
+const slug = slugs[slugs.length - 1];
 
 const iframe = document.getElementById("page") as HTMLIFrameElement;
-const page = htmlToPage(db.home);
+const page = htmlToPage(db[slug]);
 
 let chosenElement: PageElement | undefined = undefined;
 
@@ -73,7 +75,7 @@ const generateHierarchy = () => {
     wrapper.setAttribute("wysiwyg", "container");
 
     const text = wrapper.appendChild(document.createElement("span"));
-    text.innerText = "Home";
+    text.innerText = slug;
 
     for (const element of page.body) {
         wrapper.appendChild(generateHierarchyElement(element, 0));
@@ -122,7 +124,7 @@ if (saveButton)
         const body = document.createElement("body");
         body.append(...pageToHtml(page));
 
-        fetch("/portal/edit/home", {
+        fetch(window.location.pathname, {
             method: "POST",
             body: body.innerHTML,
         });
