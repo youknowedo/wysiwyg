@@ -111,7 +111,7 @@
 #editor > .left div.isElement > span {
     cursor: pointer;
 }
-#editor > .left div.isElement > span:not(.chosen):hover {
+#editor > .left div.isElement > span.hover {
     background-color: var(--light-grey);
 }
 #editor > .left div:not(.isElement) > span {

@@ -21,7 +21,6 @@
 }
 [wysiwyg]:hover::before,
 [wysiwyg].hover::before {
-    pointer-events: none;
     border: 1px solid var(--dark);
     margin: -1px;
 }

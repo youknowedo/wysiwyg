@@ -27,6 +27,7 @@ const generateHierarchyElement = <K extends keyof PageElementTypes>(
     const text = wrapper.appendChild(document.createElement("span"));
     text.innerText = element.type;
     if (element == chosenElement) text.classList.add("chosen");
+    if (element == hoverElement) text.classList.add("hover");
     text.onclick = (e) => {
         e.preventDefault();
 

@@ -104,6 +104,22 @@ export const elementToHtml = <K extends keyof PageElementTypes>(
             html.oninput = () => {
                 element.value = html.innerHTML;
             };
+        } else {
+            html.onmouseenter = (e) => {
+                if (e.target != e.currentTarget) return;
+                if (element == hoverElement) return;
+
+                setHoverElement(element);
+
+                generateHierarchy();
+            };
+            html.onmouseleave = (e) => {
+                if (e.target != e.currentTarget) return;
+
+                setHoverElement(undefined);
+
+                generateHierarchy();
+            };
         }
 
         return html;
