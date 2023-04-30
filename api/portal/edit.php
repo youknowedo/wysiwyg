@@ -1,19 +1,15 @@
 <?php
 
 $method = $_SERVER['REQUEST_METHOD'];
-
+$slug = str_replace("/portal/edit/", "", $path);
 
 if ($method == "POST") {
-    $path = $_SERVER['REQUEST_URI'];
-    str_ends_with($path, "/") && $path = substr($path, 0, -1);
-
-
     $newPage = file_get_contents('php://input');
 
     $public_dir = dirname(__DIR__, 1) . "/../public";
 
     $db = json_decode(file_get_contents($db_file), true);
-    $db[str_replace("/portal/edit/", "", $path)] = $newPage;
+    $db[$slug] = $newPage;
     echo json_encode($db);
 
     $db_file = fopen($public_dir . "/temp_database.json", "w") or die("Unable to open file!");
@@ -22,7 +18,15 @@ if ($method == "POST") {
 }
 ?>
 
-<?php if ($method == "GET"): ?>
+<?php if ($method == "GET"):
+    if (!isset($db[$slug])) {
+        include "404.php";
+        http_response_code(404);
+        die();
+    }
+    ?>
+
+
     <div id="banner">
         <div id="tools">
             <div class="left"></div>

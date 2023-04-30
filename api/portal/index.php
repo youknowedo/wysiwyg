@@ -1,6 +1,6 @@
 <?php
 if ($path == "/portal/edit") {
-    header("Location:edit/home");
+    header("Location:home");
     die();
 }
 ?>
