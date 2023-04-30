@@ -5,6 +5,10 @@
     --purple: #8438fa;
 }
 
+[contenteditable] {
+    outline: 0;
+}
+
 [wysiwyg] {
     position: relative;
 }
@@ -16,6 +20,10 @@
     width: 100%;
 }
 [wysiwyg]:hover::before,
+[wysiwyg].hover::before {
+    border: 1px solid var(--dark);
+    margin: -1px;
+}
 [wysiwyg].chosen::before {
     pointer-events: none;
     border: 2px solid var(--purple);

@@ -27,21 +27,26 @@ if ($method == "POST") {
         <div id="tools">
             <div class="left"></div>
             <div class="right">
-                <button id="saveButton">Save</button>
+                <button id="saveButton">Sav</button>
             </div>
         </div>
         <div id="modeSelector"></div>
     </div>
 
-    <script type="module" src="/src/portal/edit/edit.js"></script>
+    <script type="module" src="/src/portal/edit/index.js"></script>
 
     <div id="editor">
-        <div id="left" class="menu"></div>
+        <div class="left menu"></div>
 
         <div>
             <iframe id="page"></iframe>
         </div>
 
-        <div id="right" class="menu"></div>
+        <div class="right menu">
+            <div id="cssInspector">
+
+            </div>
+        </div>
     </div>
+
 <?php endif; ?>

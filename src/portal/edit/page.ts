@@ -4,6 +4,13 @@ import {
     elementIsContainer,
     elementIsText,
 } from "./elements.js";
+import {
+    chosenElement,
+    hoverElement,
+    render,
+    setChosenElement,
+    setHoverElement,
+} from "./index.js";
 
 export type Page = {
     body: PageElement[];
@@ -58,11 +65,11 @@ export const htmlToPageElement = (html: Element): PageElement => {
     }
 };
 
-export const pageToHtml = (page: Page, chosenElement?: PageElement): Node[] => {
+export const pageToHtml = (page: Page): Node[] => {
     let body = document.createElement("body");
 
     for (const element of page.body) {
-        body.appendChild(elementToHtml(element, chosenElement));
+        body.appendChild(elementToHtml(element));
     }
 
     const html: Node[] = [];
@@ -74,33 +81,82 @@ export const pageToHtml = (page: Page, chosenElement?: PageElement): Node[] => {
 };
 
 export const elementToHtml = <K extends keyof PageElementTypes>(
-    element: PageElement<K>,
-    chosenElement?: PageElement<K>
+    element: PageElement<K>
 ): ChildNode => {
-    if (element.type == "text" && elementIsText(element)) {
+    if (elementIsText(element)) {
         const html = document.createElement(element.tag);
         html.id = element.id;
         html.innerHTML = element.value;
         html.setAttribute("wysiwyg", element.type);
+        if (hoverElement == element) html.classList.add("hover");
+        html.onclick = (e) => {
+            e.preventDefault();
+            if (chosenElement == element) return;
+
+            setChosenElement(element);
+
+            render();
+        };
 
         if (element == chosenElement) {
             html.classList.add("chosen");
-            html.setAttribute("contenteditable", "true");
-            html.oninput = (e) => {
+            html.setAttribute("contenteditable", "");
+            html.oninput = () => {
                 element.value = html.innerHTML;
             };
+        } else if (hoverElement == undefined) {
+            html.onmouseenter = (e) => {
+                if (e.target != e.currentTarget) return;
+
+                setHoverElement(element);
+
+                render();
+            };
         }
+        html.onmouseleave = (e) => {
+            if (e.target != e.currentTarget) return;
+
+            setHoverElement(undefined);
+
+            render();
+        };
 
         return html;
-    } else if (element.type == "container" && elementIsContainer(element)) {
+    } else if (elementIsContainer(element)) {
         const html = document.createElement("div");
         html.id = element.id;
         html.setAttribute("wysiwyg", element.type);
+        if (hoverElement == element) html.classList.add("hover");
+        html.onclick = (e) => {
+            e.preventDefault();
+            if (e.currentTarget != e.target) return;
+            if (chosenElement == element) return;
+
+            setChosenElement(element);
+
+            render();
+        };
 
         if (element == chosenElement) html.classList.add("chosen");
+        else if (hoverElement == undefined) {
+            html.onmouseenter = (e) => {
+                if (e.target != e.currentTarget) return;
+
+                setHoverElement(element);
+
+                render();
+            };
+        }
+        html.onmouseleave = (e) => {
+            if (e.target != e.currentTarget) return;
+
+            setHoverElement(undefined);
+
+            render();
+        };
 
         for (const child of element.children) {
-            html.appendChild(elementToHtml(child, chosenElement));
+            html.appendChild(elementToHtml(child));
         }
 
         return html;
