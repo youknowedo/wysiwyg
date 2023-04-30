@@ -1,3 +1,5 @@
+/*#region anner*/
+
 #banner > #tools {
     display: flex;
     justify-content: space-between;
@@ -38,6 +40,8 @@
     background-color: var(--light-grey);
 }
 
+/*#endregion*/
+
 #editor {
     display: flex;
 }
@@ -49,6 +53,7 @@
     background-color: var(--dark);
 }
 
+/*#region Hierarchy*/
 #editor > .left {
     color: white;
 }
@@ -120,6 +125,8 @@
 #editor > .left span.chosen {
     background-color: var(--purple);
 }
+
+/*#endregion*/
 
 div:has(> #page) {
     padding: 1rem;
