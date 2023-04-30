@@ -2,6 +2,7 @@ import { PageElementTypes, elementIsContainer } from "./elements.js";
 import { PageElement, htmlToPage, pageToHtml, type Page } from "./page.js";
 
 const db = await fetch("/temp_database.json").then((res) => res.json());
+
 const slugs = window.location.pathname.split("/");
 slugs[slugs.length - 1] == "" && slugs.pop();
 const slug = slugs[slugs.length - 1];
@@ -27,13 +28,13 @@ const generateHierarchyElement = <K extends keyof PageElementTypes>(
     const text = wrapper.appendChild(document.createElement("span"));
     text.innerText = element.type;
     if (element == chosenElement) text.classList.add("chosen");
-    if (element == hoverElement) text.classList.add("hover");
+    else if (element == hoverElement) text.classList.add("hover");
     text.onclick = (e) => {
         e.preventDefault();
 
         chosenElement = element;
 
-        generateHierarchy();
+        render();
     };
     text.onmouseenter = (e) => {
         e.preventDefault();
@@ -42,14 +43,14 @@ const generateHierarchyElement = <K extends keyof PageElementTypes>(
 
         hoverElement = element;
 
-        generateHierarchy();
+        render();
     };
     text.onmouseleave = (e) => {
         e.preventDefault();
         if (e.currentTarget != e.target) return;
         hoverElement = undefined;
 
-        generateHierarchy();
+        render();
     };
 
     if (elementIsContainer(element)) {
@@ -72,7 +73,7 @@ const generateHierarchyElement = <K extends keyof PageElementTypes>(
                 children: [],
             } as PageElement<"container">);
 
-            generateHierarchy();
+            render();
         };
     }
 
@@ -87,9 +88,9 @@ if (hierarchy)
 
         chosenElement = undefined;
 
-        generateHierarchy();
+        render();
     };
-export const generateHierarchy = () => {
+const generateHierarchy = () => {
     if (!hierarchy) throw new Error("Hierarchy doesn't exist");
 
     hierarchy.innerHTML = "";
@@ -115,11 +116,7 @@ export const generateHierarchy = () => {
             type: "container",
             children: [],
         } as PageElement<"container">);
-
-        generateHierarchy();
     };
-
-    generateIFrame();
 };
 
 const generateIFrame = () => {
@@ -133,17 +130,24 @@ const generateIFrame = () => {
 
         chosenElement = undefined;
 
-        generateHierarchy();
+        render();
     };
 
-    const css = doc.createElement("link");
-    css.href = "/styles/portal/edit/iframe.css";
-    css.rel = "stylesheet";
-    css.type = "text/css";
-    doc.head.appendChild(css);
+    if (
+        !doc.querySelector('head>link[href="/styles/portal/edit/iframe.css"]')
+    ) {
+        const css = doc.createElement("link");
+        css.href = "/styles/portal/edit/iframe.css";
+        css.rel = "stylesheet";
+        css.type = "text/css";
+        doc.head.appendChild(css);
+    }
 };
 
-generateHierarchy();
+export const render = () => {
+    generateHierarchy();
+    generateIFrame();
+};
 
 const saveButton = document.getElementById(
     "saveButton"
@@ -163,3 +167,5 @@ if (saveButton)
 
         saveButton.disabled = false;
     };
+
+render();

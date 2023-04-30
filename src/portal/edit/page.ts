@@ -1,16 +1,16 @@
 import {
-    chosenElement,
-    generateHierarchy,
-    hoverElement,
-    setChosenElement,
-    setHoverElement,
-} from "./edit.js";
-import {
     PageElementTextTag,
     PageElementTypes,
     elementIsContainer,
     elementIsText,
 } from "./elements.js";
+import {
+    chosenElement,
+    hoverElement,
+    render,
+    setChosenElement,
+    setHoverElement,
+} from "./index.js";
 
 export type Page = {
     body: PageElement[];
@@ -95,7 +95,7 @@ export const elementToHtml = <K extends keyof PageElementTypes>(
 
             setChosenElement(element);
 
-            generateHierarchy();
+            render();
         };
 
         if (element == chosenElement) {
@@ -104,23 +104,22 @@ export const elementToHtml = <K extends keyof PageElementTypes>(
             html.oninput = () => {
                 element.value = html.innerHTML;
             };
-        } else {
+        } else if (hoverElement == undefined) {
             html.onmouseenter = (e) => {
                 if (e.target != e.currentTarget) return;
-                if (element == hoverElement) return;
 
                 setHoverElement(element);
 
-                generateHierarchy();
-            };
-            html.onmouseleave = (e) => {
-                if (e.target != e.currentTarget) return;
-
-                setHoverElement(undefined);
-
-                generateHierarchy();
+                render();
             };
         }
+        html.onmouseleave = (e) => {
+            if (e.target != e.currentTarget) return;
+
+            setHoverElement(undefined);
+
+            render();
+        };
 
         return html;
     } else if (elementIsContainer(element)) {
@@ -135,10 +134,26 @@ export const elementToHtml = <K extends keyof PageElementTypes>(
 
             setChosenElement(element);
 
-            generateHierarchy();
+            render();
         };
 
         if (element == chosenElement) html.classList.add("chosen");
+        else if (hoverElement == undefined) {
+            html.onmouseenter = (e) => {
+                if (e.target != e.currentTarget) return;
+
+                setHoverElement(element);
+
+                render();
+            };
+        }
+        html.onmouseleave = (e) => {
+            if (e.target != e.currentTarget) return;
+
+            setHoverElement(undefined);
+
+            render();
+        };
 
         for (const child of element.children) {
             html.appendChild(elementToHtml(child));

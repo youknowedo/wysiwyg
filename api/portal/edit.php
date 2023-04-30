@@ -33,7 +33,7 @@ if ($method == "POST") {
         <div id="modeSelector"></div>
     </div>
 
-    <script type="module" src="/src/portal/edit/edit.js"></script>
+    <script type="module" src="/src/portal/edit/index.js"></script>
 
     <div id="editor">
         <div class="left menu"></div>
@@ -42,6 +42,11 @@ if ($method == "POST") {
             <iframe id="page"></iframe>
         </div>
 
-        <div class="right menu"></div>
+        <div class="right menu">
+            <div id="cssInspector">
+
+            </div>
+        </div>
     </div>
+
 <?php endif; ?>
