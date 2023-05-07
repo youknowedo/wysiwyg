@@ -13,6 +13,7 @@ export const elementIsContainer = (
     element: PageElement
 ): element is PageElement<"container"> => element.type == "container";
 export interface PageElementContainer extends PageElementType {
+    hierarchyOpen: boolean;
     children: PageElement<keyof PageElementTypes>[];
 }
 

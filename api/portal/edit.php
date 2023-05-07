@@ -48,7 +48,30 @@ if ($method == "POST") {
 
         <div class="right menu">
             <div id="cssInspector">
-
+                <div class="group">
+                    <span>Layout</span>
+                    <div class="subgroup">
+                        <span>Flex Items</span>
+                        <div class="item">
+                            <span class="label">Direction</span>
+                            <div class="input">
+                                <div class="horizontalMenu">
+                                    <button class="selected">V</button>
+                                    <button>H</button>
+                                </div>
+                                <button>Flip</button>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <span class="label">Align</span>
+                            <div class="input"></div>
+                        </div>
+                        <div class="item">
+                            <span class="label">Justify</span>
+                            <div class="input"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

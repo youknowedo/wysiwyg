@@ -18,6 +18,7 @@ export type Page = {
 
 export type PageElement<K extends keyof PageElementTypes = any> = {
     type: K;
+    parent?: PageElement<"container">;
 } & PageElementTypes[K];
 
 export const htmlToPage = (html: string): Page => {
@@ -35,13 +36,17 @@ export const htmlToPage = (html: string): Page => {
     };
 };
 
-export const htmlToPageElement = (html: Element): PageElement => {
+export const htmlToPageElement = (
+    html: Element,
+    parent?: PageElement<"container">
+): PageElement => {
     const type = html.attributes.getNamedItem("wysiwyg")
         ?.value as keyof PageElementTypes;
 
     if (type == "text") {
         const element: PageElement<"text"> = {
             type,
+            parent,
             id: html.id,
             tag: html.tagName.toLowerCase() as PageElementTextTag,
             value: html.innerHTML,
@@ -49,17 +54,17 @@ export const htmlToPageElement = (html: Element): PageElement => {
 
         return element;
     } else if (type == "container") {
-        const children: PageElement[] = [];
-
-        for (const child of html.children) {
-            children.push(htmlToPageElement(child));
-        }
-
         const element: PageElement<"container"> = {
             type,
             id: html.id,
-            children,
+            children: [],
+            parent,
+            hierarchyOpen: false,
         };
+
+        for (const child of html.children) {
+            element.children.push(htmlToPageElement(child, element));
+        }
 
         return element;
     }
@@ -94,6 +99,12 @@ export const elementToHtml = <K extends keyof PageElementTypes>(
             if (chosenElement == element) return;
 
             setChosenElement(element);
+
+            let parent = element.parent;
+            while (parent != undefined) {
+                parent.hierarchyOpen = true;
+                parent = parent.parent;
+            }
 
             render();
         };

@@ -1,4 +1,4 @@
-/*#region anner*/
+/*#region banner*/
 
 #banner > #tools {
     display: flex;
@@ -44,86 +44,170 @@
 
 #editor {
     display: flex;
+    color: white;
 }
 
-.menu {
+#editor > .menu {
     height: calc(100vh - 50px);
     width: 200px;
 
     background-color: var(--dark);
 }
+#editor > .left {
+    border-right: 1px solid var(--light-grey);
+}
+#editor > .right {
+    border-left: 1px solid var(--light-grey);
+}
+
+#editor #cssInspector .item {
+    display: flex;
+}
+#editor #cssInspector .item > span.label {
+    font-size: 0.75rem;
+    width: 4rem;
+}
+#editor #cssInspector .item > .input {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+}
+
+.horizontalMenu {
+    background-color: var(--grey);
+    padding: 0.25rem;
+    border: 1px solid var(--light-grey);
+    border-radius: 4px;
+    color: var(--light-grey);
+}
+
+.horizontalMenu button {
+    background-color: transparent;
+    padding: 0.25rem 0.5rem;
+    border: 0;
+    color: rgba(255, 255, 255, 0.5);
+}
 
 /*#region Hierarchy*/
-#editor > .left {
-    color: white;
+#editor > .left .toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--light-grey);
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 0.5rem 1rem;
 }
 
-#editor > .left div {
-    padding: 0 0.5rem;
-    margin-top: 0.25rem;
-    margin-left: 0.5rem;
-    display: inline-block;
-}
-
-#editor > .left div[wysiwyg="container"] {
+#editor > .left .toolbar > button {
     position: relative;
-    padding-bottom: 1rem;
-    margin-bottom: 0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 3px;
+    padding: 4px 6px;
+    background-color: var(--grey);
+    border: 0;
+    border-radius: 4px;
+    fill: white;
+    cursor: pointer;
 }
-
-#editor > .left div[wysiwyg="container"]::after {
-    content: "";
-    position: absolute;
-    top: 2.25rem;
-    bottom: 0;
-    left: 1rem;
-    width: 0.25rem;
-
-    border-left: 1px solid rgba(255, 255, 255, 0.25);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.25);
-}
-
-#editor > .left div[wysiwyg="container"] .newButton {
-    position: absolute;
-    bottom: 0;
-    left: 1.5rem;
+#editor > .left .toolbar > button:not(.open):hover {
     background-color: var(--light-grey);
-    height: 1rem;
-    width: 1rem;
-    translate: 0 50%;
-    text-align: center;
+}
+#editor > .left .toolbar > button > .arrow {
+    rotate: 180deg;
+}
+
+#editor > .left .toolbar > button :has(.menu) {
+    display: none;
+}
+#editor > .left .toolbar > button.open :has(> .menu) {
+    padding-top: 0.25rem;
+    display: block;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    translate: 0 100%;
+}
+#editor > .left .toolbar > button .menu {
+    background-color: var(--grey);
+    border: 1px solid var(--light-grey);
+    border-radius: 2px;
+    color: white;
+    font-size: 11px;
+}
+#editor > .left .toolbar > button .menu > span {
+    display: block;
+    text-align: left;
+    padding: 0.5rem 1rem;
+}
+#editor > .left .toolbar > button .menu > span:hover {
+    background-color: var(--light-grey);
+}
+
+#editor > .left div[wysiwyg] span {
     display: flex;
     align-items: center;
-    justify-content: center;
-    border-radius: 4px;
-    color: rgba(255, 255, 255, 0.5);
+    font-size: 11px;
+    height: 2rem;
+    padding: 0 1rem;
+    border: 1px solid transparent;
+    cursor: pointer;
+}
+
+#editor > .left div[wysiwyg="container"] > span > .arrow {
+    display: none;
+}
+#editor > .left:hover div[wysiwyg="container"] > span > .arrow {
+    display: flex;
+    align-items: center;
+}
+#editor > .left div[wysiwyg="container"] > span > .arrow > svg {
+    fill: rgba(255, 255, 255, 0.5);
+    margin-left: -0.75rem;
+    rotate: 180deg;
+}
+#editor > .left div[wysiwyg="container"].close > span > .arrow > svg {
+    rotate: 90deg;
+}
+#editor > .left div[wysiwyg="container"].close > div {
+    display: none;
+}
+#editor > .left div[wysiwyg="container"] > span:only-child > .arrow {
+    display: none;
+}
+
+#editor > .left div[wysiwyg] > span > .actions {
+    flex: 1;
+    display: none;
+    justify-content: end;
+    align-items: center;
+}
+#editor > .left div[wysiwyg] > span.chosen > .actions,
+#editor > .left div[wysiwyg] > span.hover > .actions {
+    display: flex;
+}
+#editor > .left div[wysiwyg] > span > .actions button {
+    background-color: transparent;
     border: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#editor > .left div[wysiwyg] > span > .actions button > svg {
+    fill: white;
 }
 
-#editor > .left div[wysiwyg="container"] .newButton:hover {
-    color: white;
-    cursor: pointer;
+#editor > .left div[wysiwyg] span.hover {
+    border-color: var(--purple);
 }
-
-#editor > .left div > span {
-    display: block;
-    width: 4rem;
-    font-size: 0.75rem;
+#editor > .left div:has(> span.chosen) > div {
     background-color: var(--grey);
-    padding: 0.5rem 0.75rem;
-    border-radius: 4px;
-}
-#editor > .left div.isElement > span {
-    cursor: pointer;
-}
-#editor > .left div.isElement > span.hover {
-    background-color: var(--light-grey);
-}
-#editor > .left div:not(.isElement) > span {
-    cursor: default;
 }
 #editor > .left span.chosen {
-    background-color: var(--purple);
+    background-color: var(--light-grey);
 }
 
 /*#endregion*/

@@ -19,7 +19,6 @@
     height: 100%;
     width: 100%;
 }
-[wysiwyg]:hover::before,
 [wysiwyg].hover::before {
     border: 1px solid var(--dark);
     margin: -1px;
