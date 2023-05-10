@@ -60,34 +60,6 @@
     border-left: 1px solid var(--light-grey);
 }
 
-#editor #cssInspector .item {
-    display: flex;
-}
-#editor #cssInspector .item > span.label {
-    font-size: 0.75rem;
-    width: 4rem;
-}
-#editor #cssInspector .item > .input {
-    flex: 1;
-    display: flex;
-    justify-content: space-between;
-}
-
-.horizontalMenu {
-    background-color: var(--grey);
-    padding: 0.25rem;
-    border: 1px solid var(--light-grey);
-    border-radius: 4px;
-    color: var(--light-grey);
-}
-
-.horizontalMenu button {
-    background-color: transparent;
-    padding: 0.25rem 0.5rem;
-    border: 0;
-    color: rgba(255, 255, 255, 0.5);
-}
-
 /*#region Hierarchy*/
 #editor > .left .toolbar {
     display: flex;
@@ -174,6 +146,9 @@
 #editor > .left div[wysiwyg="container"].close > div {
     display: none;
 }
+#editor > .left div[wysiwyg="container"] > span:not(:only-child) {
+    font-weight: bold;
+}
 #editor > .left div[wysiwyg="container"] > span:only-child > .arrow {
     display: none;
 }
@@ -224,4 +199,84 @@ div:has(> #page) {
     border: 1 solid var(--sb-blue);
     border-radius: 1rem;
     background-color: white;
+}
+
+#editor > .right {
+    padding: 0;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+#editor > .right h1 {
+    margin: 0;
+    padding: 1rem;
+    font-weight: bold;
+    font-size: 1rem;
+}
+#editor > .right h2 {
+    margin: 0;
+    margin-bottom: 0.5rem;
+    font-weight: normal;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+#editor > .right .subgroup {
+    padding: 0 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+#stylesInspector .item {
+    display: flex;
+    align-items: center;
+}
+#stylesInspector .item > span.label {
+    font-size: 0.75rem;
+    width: 4rem;
+}
+#stylesInspector .item > .input {
+    flex: 1;
+    display: flex;
+    gap: 0.25rem;
+}
+#stylesInspector .item > .input > button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--grey);
+    padding: 0.25rem 0.5rem;
+    border: 1px solid var(--light-grey);
+    border-radius: 4px;
+    color: rgba(255, 255, 255, 0.5);
+    fill: rgba(255, 255, 255, 0.5);
+}
+
+.horizontalMenu {
+    flex: 1;
+    position: relative;
+    display: flex;
+    background-color: var(--grey);
+    padding: 0.1rem;
+    border: 1px solid var(--light-grey);
+    border-radius: 4px;
+    color: var(--light-grey);
+}
+
+.horizontalMenu > .highlight {
+    position: absolute;
+}
+
+.horizontalMenu button {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+    padding: 0.25rem 0;
+    border: 0;
+    color: rgba(255, 255, 255, 0.5);
+    fill: rgba(255, 255, 255, 0.5);
+    font-size: 0.75rem;
 }

@@ -1,16 +1,16 @@
 import {
-    PageElementTextTag,
-    PageElementTypes,
-    elementIsContainer,
-    elementIsText,
-} from "./elements.js";
-import {
     chosenElement,
     hoverElement,
     render,
     setChosenElement,
     setHoverElement,
-} from "./index.js";
+} from "../edit.js";
+import {
+    PageElementTextTag,
+    PageElementTypes,
+    elementIsContainer,
+    elementIsText,
+} from "./elements.js";
 
 export type Page = {
     body: PageElement[];
@@ -50,6 +50,7 @@ export const htmlToPageElement = (
             id: html.id,
             tag: html.tagName.toLowerCase() as PageElementTextTag,
             value: html.innerHTML,
+            styles: {},
         };
 
         return element;
@@ -60,6 +61,15 @@ export const htmlToPageElement = (
             children: [],
             parent,
             hierarchyOpen: false,
+            styles: {
+                layout: {
+                    flexItems: {
+                        direction: "down",
+                        align: "start",
+                        justify: "start",
+                    },
+                },
+            },
         };
 
         for (const child of html.children) {

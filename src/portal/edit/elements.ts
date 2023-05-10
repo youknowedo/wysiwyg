@@ -1,18 +1,20 @@
-import { PageElement } from "./page";
+import { PageElement } from "./page.js";
+import { LayoutStyles } from "./styles.js";
 
 export interface PageElementTypes {
     container: PageElementContainer;
     text: PageElementText;
 }
 
-export interface PageElementType {
+export interface PageElementType<S = {}> {
     id: string;
+    styles: S;
 }
 
 export const elementIsContainer = (
     element: PageElement
 ): element is PageElement<"container"> => element.type == "container";
-export interface PageElementContainer extends PageElementType {
+export interface PageElementContainer extends PageElementType<LayoutStyles> {
     hierarchyOpen: boolean;
     children: PageElement<keyof PageElementTypes>[];
 }
