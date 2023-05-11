@@ -253,6 +253,10 @@ div:has(> #page) {
     fill: rgba(255, 255, 255, 0.5);
 }
 
+#directionInvert.inverted {
+    fill: white !important;
+}
+
 .horizontalMenu {
     flex: 1;
     position: relative;
@@ -265,10 +269,15 @@ div:has(> #page) {
 }
 
 .horizontalMenu > .highlight {
+    z-index: 0;
     position: absolute;
+    background-color: rgba(255, 255, 255, 0.25);
+    border-radius: 4px;
+    transition-duration: 200ms;
 }
 
 .horizontalMenu button {
+    z-index: 1;
     flex: 1;
     display: flex;
     justify-content: center;
@@ -276,7 +285,7 @@ div:has(> #page) {
     background-color: transparent;
     padding: 0.25rem 0;
     border: 0;
-    color: rgba(255, 255, 255, 0.5);
-    fill: rgba(255, 255, 255, 0.5);
+    color: white;
+    fill: white;
     font-size: 0.75rem;
 }

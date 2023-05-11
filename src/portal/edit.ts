@@ -1,5 +1,6 @@
 import { generateHierarchy } from "./edit/hierarchy.js";
 import { PageElement, htmlToPage, pageToHtml, type Page } from "./edit/page.js";
+import { generateStylesInspector } from "./edit/styles.js";
 
 const db = await fetch("/temp_database.json").then((res) => res.json());
 
@@ -8,25 +9,29 @@ slugs[slugs.length - 1] == "" && slugs.pop();
 export const slug = slugs[slugs.length - 1];
 
 const iframe = document.getElementById("page") as HTMLIFrameElement;
-export const page = htmlToPage(db[slug]);
 
-export let chosenElement: PageElement | undefined = undefined;
-export const setChosenElement = (e: PageElement | undefined) =>
-    (chosenElement = e);
-export let hoverElement: PageElement | undefined = undefined;
-export const setHoverElement = (e: PageElement | undefined) =>
-    (hoverElement = e);
+export type EditMaster = {
+    page: Page;
+    chosenElement: PageElement | undefined;
+    hoverElement: PageElement | undefined;
+};
+const editMaster: EditMaster = {
+    page: htmlToPage(db[slug]),
+    chosenElement: undefined,
+    hoverElement: undefined,
+};
+console.log(editMaster.page);
 
 const generateIFrame = () => {
     const doc = iframe.contentDocument;
     if (!doc) throw new Error("iframe missing doc");
 
     doc.body.innerHTML = "";
-    doc.body.append(...pageToHtml(page));
+    doc.body.append(...pageToHtml(editMaster));
     doc.body.onclick = (e) => {
         if (e.currentTarget != e.target) return;
 
-        chosenElement = undefined;
+        editMaster.chosenElement = undefined;
 
         render();
     };
@@ -43,8 +48,9 @@ const generateIFrame = () => {
 };
 
 export const render = () => {
-    generateHierarchy();
+    generateHierarchy(editMaster);
     generateIFrame();
+    generateStylesInspector(editMaster);
 };
 
 const saveButton = document.getElementById(
@@ -56,7 +62,7 @@ if (saveButton)
         saveButton.disabled = true;
 
         const body = document.createElement("body");
-        body.append(...pageToHtml(page));
+        body.append(...pageToHtml(editMaster));
 
         await fetch(window.location.pathname, {
             method: "POST",

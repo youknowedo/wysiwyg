@@ -1,5 +1,5 @@
 import { PageElement } from "./page.js";
-import { LayoutStyles } from "./styles.js";
+import { LayoutStyles } from "./styles/layout.js";
 
 export interface PageElementTypes {
     container: PageElementContainer;

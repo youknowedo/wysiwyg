@@ -1,33 +1,13 @@
-import { chosenElement } from "../edit.js";
+import { EditMaster, render } from "../edit.js";
+import { PageElement } from "./page.js";
+import { generateLayoutSettings, hasLayoutStyles } from "./styles/layout.js";
 
-export const hasLayoutStyles = (styles: any): styles is LayoutStyles =>
-    styles.layout != undefined;
-export type LayoutStyles = {
-    layout: {
-        flexItems: {
-            direction: "up" | "down" | "left" | "right";
-            align: "start" | "center" | "end" | "stretch";
-            justify: "start" | "center" | "end" | "stretch";
-        };
-    };
-};
-
-document.getElementById("stylesInspector");
-export const generateStylesInspector = () => {
-    const styles = chosenElement.styles;
+const layoutSettings = document.getElementById("layout") as HTMLElement;
+export const generateStylesInspector = (editMaster: EditMaster) => {
+    let styles = editMaster.chosenElement?.styles;
 
     if (hasLayoutStyles(styles)) {
-        const directionItem = document.getElementById("direction");
-        const menu = directionItem?.querySelector(".horizontalMenu");
-        const highlight = menu?.querySelector(".highlight") as HTMLElement;
-        const options = menu?.querySelectorAll("button");
-        switch (styles.layout.flexItems.direction) {
-            case "down":
-                highlight.style.left = options?.[0].offsetLeft.toString;
-                break;
-
-            default:
-                break;
-        }
-    }
+        layoutSettings.style.display = "block";
+        generateLayoutSettings(styles, editMaster);
+    } else layoutSettings.style.display = "none";
 };

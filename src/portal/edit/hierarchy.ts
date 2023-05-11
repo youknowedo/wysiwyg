@@ -1,20 +1,17 @@
-import {
-    chosenElement,
-    hoverElement,
-    page,
-    render,
-    setChosenElement,
-    setHoverElement,
-    slug,
-} from "../edit.js";
+import { generateId } from "../../utils/id.js";
+import { EditMaster, render, slug } from "../edit.js";
 import {
     PageElementTypes,
     elementIsContainer,
     elementIsText,
 } from "./elements.js";
-import { PageElement } from "./page";
+import { Page, PageElement } from "./page.js";
 
-const generateHierarchyElement = (element: PageElement, level = 1) => {
+const generateHierarchyElement = (
+    element: PageElement,
+    editMaster: EditMaster,
+    level = 1
+) => {
     if (!elementIsText(element) && !elementIsContainer(element))
         throw new Error("Element type not recognized");
 
@@ -25,28 +22,29 @@ const generateHierarchyElement = (element: PageElement, level = 1) => {
     const text = wrapper.appendChild(document.createElement("span"));
     text.innerText = element.type;
     text.style.paddingLeft = `${level}rem`;
-    if (element == chosenElement) text.classList.add("chosen");
-    else if (element == hoverElement) text.classList.add("hover");
+    if (element == editMaster.chosenElement) text.classList.add("chosen");
+    else if (element == editMaster.hoverElement) text.classList.add("hover");
     text.onclick = (e) => {
         e.preventDefault();
 
-        setChosenElement(element);
+        editMaster.hoverElement = undefined;
+        editMaster.chosenElement = element;
 
         render();
     };
     text.onmouseenter = (e) => {
         e.preventDefault();
         if (e.currentTarget != e.target) return;
-        if (hoverElement == element) return;
+        if (editMaster.hoverElement == element) return;
 
-        setHoverElement(element);
+        editMaster.hoverElement = element;
 
         render();
     };
     text.onmouseleave = (e) => {
         e.preventDefault();
         if (e.currentTarget != e.target) return;
-        setHoverElement(undefined);
+        editMaster.hoverElement = undefined;
 
         render();
     };
@@ -63,8 +61,8 @@ const generateHierarchyElement = (element: PageElement, level = 1) => {
                 1
             );
         } else {
-            page.body.splice(
-                page.body.findIndex((e) => e == element),
+            editMaster.page.body.splice(
+                editMaster.page.body.findIndex((e) => e == element),
                 1
             );
         }
@@ -88,7 +86,9 @@ const generateHierarchyElement = (element: PageElement, level = 1) => {
         if (!element.children) element.children = [];
 
         for (const child of element.children) {
-            wrapper.appendChild(generateHierarchyElement(child, level + 1));
+            wrapper.appendChild(
+                generateHierarchyElement(child, editMaster, level + 1)
+            );
         }
     }
 
@@ -96,17 +96,18 @@ const generateHierarchyElement = (element: PageElement, level = 1) => {
 };
 
 const hierarchy = document.querySelector<HTMLElement>("#editor>div.left");
-if (hierarchy)
-    hierarchy.onclick = (e) => {
-        e.preventDefault();
-        if (e.currentTarget != e.target) return;
-
-        setChosenElement(undefined);
-
-        render();
-    };
-export const generateHierarchy = () => {
+export const generateHierarchy = (editMaster: EditMaster) => {
     if (!hierarchy) throw new Error("Hierarchy doesn't exist");
+    else {
+        hierarchy.onclick = (e) => {
+            e.preventDefault();
+            if (e.currentTarget != e.target) return;
+
+            editMaster.chosenElement = undefined;
+
+            render();
+        };
+    }
 
     hierarchy.innerHTML = "";
 
@@ -130,42 +131,42 @@ export const generateHierarchy = () => {
             let newElement: PageElement<typeof item>;
             if (item == "container")
                 newElement = {
-                    id: "",
+                    id: generateId(5),
                     type: "container",
                     children: [],
                     hierarchyOpen: true,
                     styles: {
                         layout: {
                             flexItems: {
-                                direction: "down",
-                                align: "start",
-                                justify: "start",
+                                direction: "column",
+                                align: "flex-start",
+                                justify: "flex-start",
                             },
                         },
                     },
                 } as PageElement<"container">;
             else if (item == "text")
                 newElement = {
-                    id: "",
+                    id: generateId(5),
                     type: "text",
                     tag: "p",
                     value: "Lorem ipsum...",
                 } as PageElement<"text">;
             else throw new Error("Element type not recognized: " + item);
 
-            if (chosenElement == undefined) {
-                page.body.push(newElement);
-            } else if (chosenElement.type == "container") {
-                newElement.parent = chosenElement;
-                chosenElement.children.push(newElement);
-                chosenElement.hierarchyOpen = true;
-            } else if (chosenElement.parent) {
-                newElement.parent = chosenElement.parent;
-                chosenElement.parent.children.push(newElement);
+            if (editMaster.chosenElement == undefined) {
+                editMaster.page.body.push(newElement);
+            } else if (editMaster.chosenElement.type == "container") {
+                newElement.parent = editMaster.chosenElement;
+                editMaster.chosenElement.children.push(newElement);
+                editMaster.chosenElement.hierarchyOpen = true;
+            } else if (editMaster.chosenElement.parent) {
+                newElement.parent = editMaster.chosenElement.parent;
+                editMaster.chosenElement.parent.children.push(newElement);
             } else {
-                page.body.push(newElement);
+                editMaster.page.body.push(newElement);
             }
-            setChosenElement(newElement);
+            editMaster.chosenElement = newElement;
 
             render();
         };
@@ -179,7 +180,7 @@ export const generateHierarchy = () => {
         };
     };
 
-    for (const element of page.body) {
-        hierarchy.appendChild(generateHierarchyElement(element, 1));
+    for (const element of editMaster.page.body) {
+        hierarchy.appendChild(generateHierarchyElement(element, editMaster, 1));
     }
 };

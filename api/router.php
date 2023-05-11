@@ -27,7 +27,21 @@ function renderPage($db, $path)
         die();
     }
 
-    echo $page;
+    return <<<HTML
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link href="/styles/index.css" type="text/css" rel="stylesheet">
+    </head>
+    <body>
+        {$page}
+    </body>
+    </html>
+    HTML;
 }
 
 if (file_exists($public_path)) {
@@ -56,6 +70,6 @@ if (file_exists($public_path)) {
 if (str_starts_with($path, "/portal")) {
     include "portal/index.php";
 } else {
-    renderPage($db, $path);
+    echo renderPage($db, $path);
 }
 ?>
