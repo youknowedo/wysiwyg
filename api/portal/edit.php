@@ -3,24 +3,30 @@
 $method = $_SERVER['REQUEST_METHOD'];
 $slug = str_replace("/portal/edit/", "", $path);
 
+$connection = require __DIR__ . "/../db.php";
+
 if ($method == "POST") {
     $newPage = file_get_contents('php://input');
 
-    $public_dir = dirname(__DIR__, 1) . "/../public";
+    echo var_dump(
+        $connection->query("UPDATE w_pages
+                        SET html='" . $newPage . "'
+                        WHERE slug='" . $slug . "' 
+                        ")
+    );
+    echo $connection->error;
+    exit;
 
-    $db = json_decode(file_get_contents($db_file), true);
-    $db[$slug] = $newPage;
-    echo json_encode($db);
-
-    $db_file = fopen($public_dir . "/temp_database.json", "w") or die("Unable to open file!");
-    fwrite($db_file, json_encode($db));
-    fclose($db_file);
 }
+
+$r = $connection->query("SELECT * FROM w_pages WHERE slug='" . $slug . "'");
+$page = $r->fetch_assoc();
+$html = $page["html"];
 ?>
 
 <?php if ($method == "GET"):
-    if (!isset($db[$slug])) {
-        include __DIR__ . "/404.php";
+    if ($html == null) {
+        include __DIR__ . "/../404.php";
         http_response_code(404);
         die();
     }
@@ -43,7 +49,8 @@ if ($method == "POST") {
         <div class="left menu"></div>
 
         <div>
-            <iframe id="page"></iframe>
+            <iframe id="page" srcdoc="<html><body><?php echo htmlspecialchars($html); ?></body></html>">
+            </iframe>
         </div>
 
         <div class="right menu">

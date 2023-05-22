@@ -12,12 +12,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     if ($user) {
         if (password_verify($_POST["password"], $user["password_hash"])) {
-            $connection->query("UPDATE w_sessions
-                                SET username='" . $_POST["username"] . "'
-                                WHERE id='" . session_id() . "' 
-                                ");
-            header("Location:/portal");
-            exit;
+            if (
+                $connection->query("UPDATE w_sessions
+                                    SET username='" . $_POST["username"] . "'
+                                    WHERE id='" . session_id() . "' 
+                                    ")
+            ) {
+                header("Location:/portal");
+                exit;
+            } else
+                echo $connection->error;
         }
     }
 

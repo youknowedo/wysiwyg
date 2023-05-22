@@ -18,7 +18,6 @@ if (!$session) {
 $r = $connection->query("SELECT * FROM w_sessions WHERE id='" . session_id() . "'");
 $session = $r->fetch_assoc();
 
-
 if (!isset($session["username"]) && $path != "/portal/login") {
     header("Location:/portal/login");
     exit;

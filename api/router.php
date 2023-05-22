@@ -9,17 +9,13 @@ if ($path == "")
 $public_dir = dirname(__DIR__, 1) . "/public";
 $public_path = $public_dir . $path;
 
-$db_file = $public_dir . "/temp_database.json";
-$db = json_decode(file_get_contents($db_file), true);
-
-function renderPage($db, $path)
+function renderPage($path)
 {
     $page = null;
 
-    foreach ($db as $key => $html) {
-        if ("/" . $key == $path)
-            $page = $html;
-    }
+    $connection = require __DIR__ . "/db.php";
+    $r = $connection->query("SELECT * FROM w_pages WHERE slug='" . str_replace("/", "", $path) . "'");
+    $page = $r->fetch_assoc()["html"];
 
     if ($page == null) {
         include __DIR__ . "/404.php";
@@ -75,6 +71,6 @@ if ($path == "/api") {
 if (str_starts_with($path, "/portal")) {
     include __DIR__ . "/portal/index.php";
 } else {
-    echo renderPage($db, $path);
+    echo renderPage($path);
 }
 ?>

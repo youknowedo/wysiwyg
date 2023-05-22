@@ -2,13 +2,12 @@ import { generateHierarchy } from "./edit/hierarchy.js";
 import { PageElement, htmlToPage, pageToHtml, type Page } from "./edit/page.js";
 import { generateStylesInspector } from "./edit/styles.js";
 
-const db = await fetch("/temp_database.json").then((res) => res.json());
-
 const slugs = window.location.pathname.split("/");
 slugs[slugs.length - 1] == "" && slugs.pop();
 export const slug = slugs[slugs.length - 1];
 
 const iframe = document.getElementById("page") as HTMLIFrameElement;
+const doc = iframe.contentDocument;
 
 export type EditMaster = {
     page: Page;
@@ -16,14 +15,12 @@ export type EditMaster = {
     hoverElement: PageElement | undefined;
 };
 const editMaster: EditMaster = {
-    page: htmlToPage(db[slug]),
+    page: htmlToPage(doc!.body.innerHTML),
     chosenElement: undefined,
     hoverElement: undefined,
 };
-console.log(editMaster.page);
 
 const generateIFrame = () => {
-    const doc = iframe.contentDocument;
     if (!doc) throw new Error("iframe missing doc");
 
     doc.body.innerHTML = "";
