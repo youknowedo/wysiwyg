@@ -38,17 +38,17 @@ if (!isset($_SESSION["username"]) && $path != "/portal/login") {
     }
 
     if ($path == "/portal")
-        include "portal/portal.php";
+        include "./portal/portal.php";
     else if (str_starts_with($path, "/portal/edit"))
-        include "portal/edit.php";
+        include "./portal/edit.php";
     else if ($path == "/portal/users")
-        include "portal/users.php";
+        include "./portal/users.php";
     else if ($path == "/portal/login")
-        include "portal/login.php";
+        include "./portal/login.php";
     else if ($path == "/portal/logout")
-        include "portal/logout.php";
+        include "./portal/logout.php";
     else
-        include "404.php";
+        include "./404.php";
 
 
     if ($_SERVER["REQUEST_METHOD"] === "GET") {
