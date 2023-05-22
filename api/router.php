@@ -22,7 +22,7 @@ function renderPage($db, $path)
     }
 
     if ($page == null) {
-        include "./404.php";
+        include __DIR__ . "/404.php";
         http_response_code(404);
         die();
     }
@@ -68,7 +68,7 @@ if (file_exists($public_path)) {
 }
 
 if (str_starts_with($path, "/portal")) {
-    include "./portal/index.php";
+    include __DIR__ . "/portal/index.php";
 } else {
     echo renderPage($db, $path);
 }

@@ -20,7 +20,7 @@ if ($method == "POST") {
 
 <?php if ($method == "GET"):
     if (!isset($db[$slug])) {
-        include "./404.php";
+        include __DIR__ . "/404.php";
         http_response_code(404);
         die();
     }

@@ -1,2 +1,2 @@
 <?php
-include "./api/router.php";
+include __DIR__ . "/api/router.php";
