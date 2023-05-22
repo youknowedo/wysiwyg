@@ -34,7 +34,8 @@ if (!isset($_SESSION["username"]) && $path != "/portal/login") {
             </head>
 
             <body>
-            <?php
+                <?php
+                print_r($_SESSION);
     }
 
     if ($path == "/portal")
