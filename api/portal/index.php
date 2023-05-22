@@ -1,10 +1,28 @@
 <?php
 session_start();
 
-if (!isset($_SESSION["username"]) && $path != "/portal/login") {
+$connection = require __DIR__ . "/../db.php";
+$r = $connection->query("SELECT * FROM w_sessions WHERE id='" . session_id() . "'");
+$session = $r->fetch_assoc();
+
+if (!$session) {
+    $r = $connection->query("INSERT INTO w_sessions (
+                            id,
+                            username
+                        ) VALUES (
+                            '" . session_id() . "',
+                            NULL
+                            )");
+}
+
+$r = $connection->query("SELECT * FROM w_sessions WHERE id='" . session_id() . "'");
+$session = $r->fetch_assoc();
+
+
+if (!isset($session["username"]) && $path != "/portal/login") {
     header("Location:/portal/login");
     exit;
-} else if (isset($_SESSION["username"]) && $path == "/portal/login") {
+} else if (isset($session["username"]) && $path == "/portal/login") {
     header("Location:/portal");
     exit;
 } else {
@@ -34,8 +52,7 @@ if (!isset($_SESSION["username"]) && $path != "/portal/login") {
             </head>
 
             <body>
-                <?php
-                print_r($_SESSION);
+            <?php
     }
 
     if ($path == "/portal")

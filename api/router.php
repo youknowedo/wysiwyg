@@ -67,6 +67,11 @@ if (file_exists($public_path)) {
     die();
 }
 
+if ($path == "/api") {
+    include "api.php";
+    exit;
+}
+
 if (str_starts_with($path, "/portal")) {
     include __DIR__ . "/portal/index.php";
 } else {
