@@ -8,7 +8,9 @@
     "author": "",
     "license": "MIT",
     "dependencies": {
-        "nodemon": "^2.0.22",
+        "nodemon": "^2.0.22"
+    },
+    "devDependencies": {
         "typescript": "^5.0.4"
     }
 }
