@@ -91,5 +91,3 @@ while ($user = $result->fetch_assoc()) {
     echo $user["username"];
 }
 ?>
-
-<script type="module" src="/src/portal/users.js"></script>

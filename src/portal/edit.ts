@@ -59,7 +59,13 @@ if (saveButton)
         saveButton.disabled = true;
 
         const body = document.createElement("body");
-        body.append(...pageToHtml(editMaster));
+        body.append(
+            ...pageToHtml({
+                chosenElement: undefined,
+                hoverElement: undefined,
+                page: editMaster.page,
+            })
+        );
 
         await fetch(window.location.pathname, {
             method: "POST",
