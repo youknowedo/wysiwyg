@@ -69,7 +69,7 @@ if ($path == "/api") {
 }
 
 if (str_starts_with($path, "/portal")) {
-    include __DIR__ . "/portal/index.php";
+    include __DIR__ . "/portal/router.php";
 } else {
     echo renderPage($path);
 }

@@ -68,7 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                         </span>
                     </div>
                     <div>
-                        <a href="/edit/<?= $slug ?>">Edit</a>
+                        <a href="/portal/edit/<?= $page["slug"] ?>">Edit</a>
                         <button class="delete">Delete</button>
                     </div>
                 </div>
