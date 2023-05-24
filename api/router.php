@@ -15,7 +15,7 @@ function renderPage($path)
 
     $connection = require __DIR__ . "/db.php";
     $r = $connection->query("SELECT * FROM w_pages WHERE slug='" . str_replace("/", "", $path) . "'");
-    $page = $r->fetch_assoc()["html"];
+    $page = $r->fetch_assoc();
 
     if ($page == null) {
         include __DIR__ . "/404.php";
@@ -30,11 +30,11 @@ function renderPage($path)
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
+        <title>{$page["title"]}</title>
         <link href="/styles/index.css" type="text/css" rel="stylesheet">
     </head>
     <body>
-        {$page}
+        {$page["html"]}
     </body>
     </html>
     HTML;

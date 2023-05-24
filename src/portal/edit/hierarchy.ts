@@ -5,7 +5,7 @@ import {
     elementIsContainer,
     elementIsText,
 } from "./elements.js";
-import { Page, PageElement } from "./page.js";
+import { PageElement } from "./page.js";
 
 const generateHierarchyElement = (
     element: PageElement,
@@ -120,7 +120,7 @@ export const generateHierarchy = (editMaster: EditMaster) => {
 
     const wrapper = newButton.appendChild(document.createElement("div"));
     const newButtonMenu = wrapper.appendChild(document.createElement("div"));
-    newButtonMenu.classList.add("menu");
+    newButtonMenu.classList.add("hoverMenu");
     const menuItems: (keyof PageElementTypes)[] = ["container", "text"];
     for (const item of menuItems) {
         const newItem = newButtonMenu.appendChild(

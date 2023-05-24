@@ -3,91 +3,118 @@
 $connection = require __DIR__ . "/../db.php";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    if (empty($_POST["username"])) {
-        http_response_code(400);
-        die("Username is required");
-    }
+    if ($_POST["action"] == "CREATE") {
+        if (empty($_POST["username"])) {
+            http_response_code(400);
+            die("Username is required");
+        }
 
-    if (strlen($_POST["password"]) < 8) {
-        http_response_code(400);
-        die("Password must be more than 8 characters");
-    }
-    if (!preg_match("/[a-z]/i", $_POST["password"])) {
-        http_response_code(400);
-        die("Password must contain one letter");
-    }
-    if (!preg_match("/[0-9]/i", $_POST["password"])) {
-        http_response_code(400);
-        die("Password must contain one number");
-    }
-    if ($_POST["password"] !== $_POST["repeat"]) {
-        http_response_code(400);
-        die("Passwords must match");
-    }
+        if (strlen($_POST["password"]) < 8) {
+            http_response_code(400);
+            die("Password must be more than 8 characters");
+        }
+        if (!preg_match("/[a-z]/i", $_POST["password"])) {
+            http_response_code(400);
+            die("Password must contain one letter");
+        }
+        if (!preg_match("/[0-9]/i", $_POST["password"])) {
+            http_response_code(400);
+            die("Password must contain one number");
+        }
+        if ($_POST["password"] !== $_POST["repeat"]) {
+            http_response_code(400);
+            die("Passwords must match");
+        }
 
-    $connection->query("CREATE TABLE w_users(
-        id INT PRIMARY KEY AUTO_INCREMENT,
-        username VARCHAR(24) UNIQUE,
-        password_hash VARCHAR(255)
-    )");
+        $password_hash = password_hash($_POST["password"], PASSWORD_DEFAULT);
 
-    $sql = "INSERT INTO w_users (username,password_hash)
-        VALUES (?,?)";
+        if (
+            $connection->query("INSERT INTO w_users (username,password_hash)
+                                VALUES ('" . $_POST["username"] . "','" . $password_hash . "')")
+        )
+            echo "User created";
+        else {
+            if ($connection->errno === 1062)
+                die("Username already taken");
+            else
+                die($connection->error . " " . $connection->errno);
+        }
 
-    $stmt = $connection->stmt_init();
-    if (!$stmt->prepare($sql)) {
-        http_response_code(500);
-        die("SQL Error: " . $connection->error);
-    }
+        header("Location:/portal/users");
+        exit;
+    } else if ($_POST["action"] == "DELETE") {
+        if (empty($_POST["username"])) {
+            http_response_code(400);
+            die("Username is required");
+        }
 
-    $password_hash = password_hash($_POST["password"], PASSWORD_DEFAULT);
-
-    $stmt->bind_param(
-        "ss",
-        $_POST["username"],
-        $password_hash
-    );
-
-    if ($stmt->execute())
-        echo "User created";
-    else {
-        if ($connection->errno === 1062)
-            die("Username already taken");
-        else
+        if (
+            $connection->query("DELETE FROM w_users WHERE username='" . $_POST["username"] . "'")
+        )
+            echo "User deleted";
+        else {
             die($connection->error . " " . $connection->errno);
+        }
     }
-
-    exit;
 }
 
 ?>
+
+<?php include __DIR__ . "/components/banner.php"; ?>
+
 <div>
-    <form method="post">
-        <div>
-            <label for="username">Username</label>
-            <input type="text" id="username" name="username">
+    <?php include __DIR__ . "/components/sidebar.php"; ?>
+    <div id="content">
+        <div id="list">
+            <?php
+
+            $connection = require __DIR__ . "/../db.php";
+
+            $result = $connection->query("SELECT * FROM w_users");
+
+            while ($user = $result->fetch_assoc()) {
+                ?>
+
+                <div id="<?= $user["username"] ?>">
+                    <div>
+                        <h3>
+                            <?= $user["username"] ?>
+                        </h3>
+                    </div>
+                    <?php
+                    if ($session["username"] != $user["username"]) {
+                        ?>
+                        <button class="delete">Delete</button>
+                        <?php
+                    } ?>
+                </div>
+
+                <?php
+            }
+
+            ?>
         </div>
 
-        <div>
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password">
-        </div>
-        <div>
-            <label for="repeat">Repeat Password</label>
-            <input type="password" id="repeat" name="repeat">
-        </div>
+        <form method="post" id="newListItem">
+            <input name="action" value="CREATE" hidden>
+            <div>
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username">
+            </div>
 
-        <input type="submit" value="Create User">
-    </form>
+            <div>
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password">
+            </div>
+            <div>
+                <label for="repeat">Repeat Password</label>
+                <input type="password" id="repeat" name="repeat">
+            </div>
+
+            <button type="submit">Create User</button>
+        </form>
+
+    </div>
 </div>
 
-<?php
-
-print_r($_SESSION);
-
-$result = $connection->query("SELECT * FROM w_users");
-
-while ($user = $result->fetch_assoc()) {
-    echo $user["username"];
-}
-?>
+<script src="/src/portal/users.js" type="module"></script>

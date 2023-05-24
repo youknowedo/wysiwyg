@@ -56,6 +56,8 @@ if (!isset($session["username"]) && $path != "/portal/login") {
 
     if ($path == "/portal")
         include __DIR__ . "/portal.php";
+    else if ($path == "/portal/pages")
+        include __DIR__ . "/pages.php";
     else if (str_starts_with($path, "/portal/edit"))
         include __DIR__ . "/edit.php";
     else if ($path == "/portal/users")

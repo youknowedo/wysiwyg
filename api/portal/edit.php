@@ -25,7 +25,7 @@ $html = $page["html"];
 ?>
 
 <?php if ($method == "GET"):
-    if ($html == null) {
+    if ($page == null) {
         include __DIR__ . "/../404.php";
         http_response_code(404);
         die();
@@ -35,12 +35,31 @@ $html = $page["html"];
 
     <div id="banner">
         <div id="tools">
-            <div class="left"></div>
+            <div class="left">
+                <a href="/portal/pages">Back to portal</a>
+            </div>
             <div class="right">
+                <a href="/<?= $slug ?>">View</a>
                 <button id="saveButton">Sav</button>
             </div>
         </div>
-        <div id="modeSelector"></div>
+        <div id="modeSelector">
+            <div class="horizontalMenu">
+                <div class="highlight"></div>
+                <button class="selected">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="16" viewBox="0 -960 960 960" width="16">
+                        <path
+                            d="m152-145-23-7q-32-14-43.5-48t6.5-67l60-136v258Zm186 78q-34 0-58-24t-24-58v-207l92 262q2 8 6 14t10 13h-26Zm188-24q-21 9-44-4t-33-36L258-650q-10-23 2-45t37-32l318-115q23-8 45 4t32 36l191 513q7 25-3 49t-35 33L526-91Zm-82-495q12 0 21-9t9-21q0-12-9-21t-21-9q-12 0-21 9t-9 21q0 12 9 21t21 9Z" />
+                    </svg>
+                </button>
+                <button>
+                    <svg xmlns="http://www.w3.org/2000/svg" height="16" viewBox="0 -960 960 960" width="16">
+                        <path xmlns="http://www.w3.org/2000/svg"
+                            d="M427-120v-225h60v83h353v60H487v82h-60Zm-307-82v-60h247v60H120Zm187-166v-82H120v-60h187v-84h60v226h-60Zm120-82v-60h413v60H427Zm166-165v-225h60v82h187v60H653v83h-60Zm-473-83v-60h413v60H120Z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
     </div>
 
     <script type="module" src="/src/portal/edit.js"></script>
@@ -92,11 +111,13 @@ $html = $page["html"];
                             <div class="input">
                                 <div class="horizontalMenu">
                                     <div class="highlight"></div>
-                                    <button class="selected"><svg xmlns="http://www.w3.org/2000/svg" height="12"
-                                            viewBox="0 96 960 960" width="12">
+                                    <button class="selected">
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="12" viewBox="0 96 960 960"
+                                            width="12">
                                             <path
                                                 d="M111 1010q-26 0-45.5-19.5T46 945.09V206.91Q46 181 65.5 161.5 85 142 111 142t45.5 19.5Q176 181 176 206.91v738.18q0 25.91-19.5 45.41Q137 1010 111 1010Zm230-497q-35.417 0-60.208-24.826Q256 463.348 256 427.882q0-35.465 24.792-60.174Q305.583 343 341 343h488q35.417 0 60.208 24.826Q914 392.652 914 428.118q0 35.465-24.792 60.174Q864.417 513 829 513H341Zm0 296q-35.417 0-60.208-24.826Q256 759.348 256 723.882q0-35.465 24.792-60.174Q305.583 639 341 639h248q35.417 0 60.208 24.826Q674 688.652 674 724.118q0 35.465-24.792 60.174Q624.417 809 589 809H341Z" />
-                                        </svg></button>
+                                        </svg>
+                                    </button>
                                     <button>
                                         <svg xmlns="http://www.w3.org/2000/svg" height="12" viewBox="0 96 960 960"
                                             width="12">
