@@ -68,7 +68,29 @@ $html = $page["html"];
     <script type="module" src="/src/portal/edit.js"></script>
 
     <div id="editor">
-        <div class="left menu"></div>
+        <div class="left menu">
+            <div class="toolbar">
+                <?= $page["slug"] ?>
+                <button id="newButton">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="14" viewBox="0 96 960 960" width="14">
+                        <path d="M450 856V606H200v-60h250V296h60v250h250v60H510v250h-60Z"></path>
+                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="arrow" height="4" viewBox="0 96 960 960" width="4">
+                        <path d="m40 917 441-704 439 704H40Z"></path>
+                    </svg>
+                    <div>
+                        <div class="hoverMenu">
+                            <span id="container">container</span>
+                            <span id="text">text</span>
+                        </div>
+                    </div>
+                </button>
+            </div>
+
+            <div id="elements">
+
+            </div>
+        </div>
 
         <div>
             <iframe id="page" srcdoc="<html><body><?php echo htmlspecialchars($html); ?></body></html>">
