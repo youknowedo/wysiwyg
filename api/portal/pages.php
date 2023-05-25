@@ -6,11 +6,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if ($_POST["action"] == "CREATE") {
         if (empty($_POST["slug"])) {
             http_response_code(400);
-            die("Slug is required");
+            exit("Slug is required");
         }
         if (empty($_POST["title"])) {
             http_response_code(400);
-            die("Title is required");
+            exit("Title is required");
         }
 
 
@@ -20,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         )
             echo "Page created";
         else {
-            die($connection->error . " " . $connection->errno);
+            exit($connection->error . " " . $connection->errno);
         }
 
         header("Location:/portal/pages");
@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     } else if ($_POST["action"] == "DELETE") {
         if (empty($_POST["slug"])) {
             http_response_code(400);
-            die("Slug is required");
+            exit("Slug is required");
         }
 
         if (
@@ -36,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         )
             echo "Slug deleted";
         else {
-            die($connection->error . " " . $connection->errno);
+            exit($connection->error . " " . $connection->errno);
         }
     }
 }

@@ -9,7 +9,7 @@ $connection->ssl_set(NULL, NULL, __DIR__ . "/../ca.pem", NULL, NULL);
 $connection->real_connect($host, $user, $password, "wysiwyg");
 
 if ($connection->connect_errno) {
-    die("Connection error: " . $connection->connect_error);
+    exit("Connection error: " . $connection->connect_error);
 }
 
 return $connection;

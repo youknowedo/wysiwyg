@@ -28,7 +28,7 @@ $html = $page["html"];
     if ($page == null) {
         include __DIR__ . "/../404.php";
         http_response_code(404);
-        die();
+        exit;
     }
     ?>
 

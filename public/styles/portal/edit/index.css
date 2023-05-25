@@ -160,7 +160,7 @@
     justify-content: end;
     align-items: center;
 }
-#editor > .left div[wysiwyg] > span.chosen > .actions,
+#editor > .left div[wysiwyg] > span.selected > .actions,
 #editor > .left div[wysiwyg] > span.hover > .actions {
     display: flex;
 }
@@ -179,10 +179,10 @@
 #editor > .left div[wysiwyg] span.hover {
     border-color: var(--purple);
 }
-#editor > .left div:has(> span.chosen) > div {
+#editor > .left div:has(> span.selected) > div {
     background-color: var(--grey);
 }
-#editor > .left span.chosen {
+#editor > .left span.selected {
     background-color: var(--light-grey);
 }
 

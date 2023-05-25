@@ -1,3 +1,4 @@
+// Generates a random ID of a given length.
 export const generateId = (length: number) => {
     let result = "";
     const characters =

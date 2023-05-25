@@ -6,24 +6,24 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if ($_POST["action"] == "CREATE") {
         if (empty($_POST["username"])) {
             http_response_code(400);
-            die("Username is required");
+            exit("Username is required");
         }
 
         if (strlen($_POST["password"]) < 8) {
             http_response_code(400);
-            die("Password must be more than 8 characters");
+            exit("Password must be more than 8 characters");
         }
         if (!preg_match("/[a-z]/i", $_POST["password"])) {
             http_response_code(400);
-            die("Password must contain one letter");
+            exit("Password must contain one letter");
         }
         if (!preg_match("/[0-9]/i", $_POST["password"])) {
             http_response_code(400);
-            die("Password must contain one number");
+            exit("Password must contain one number");
         }
         if ($_POST["password"] !== $_POST["repeat"]) {
             http_response_code(400);
-            die("Passwords must match");
+            exit("Passwords must match");
         }
 
         $password_hash = password_hash($_POST["password"], PASSWORD_DEFAULT);
@@ -35,9 +35,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             echo "User created";
         else {
             if ($connection->errno === 1062)
-                die("Username already taken");
+                exit("Username already taken");
             else
-                die($connection->error . " " . $connection->errno);
+                exit($connection->error . " " . $connection->errno);
         }
 
         header("Location:/portal/users");
@@ -45,7 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     } else if ($_POST["action"] == "DELETE") {
         if (empty($_POST["username"])) {
             http_response_code(400);
-            die("Username is required");
+            exit("Username is required");
         }
 
         if (
@@ -53,7 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         )
             echo "User deleted";
         else {
-            die($connection->error . " " . $connection->errno);
+            exit($connection->error . " " . $connection->errno);
         }
     }
 }

@@ -1,8 +1,10 @@
 const pageEntries = document.querySelectorAll("#content > #list > div");
 
+// Add event listeners to edit and delete buttons of each page
 for (const page of pageEntries) {
     const editButton = page.querySelector("button.edit") as HTMLButtonElement;
 
+    // Redirect to edit page
     editButton.onclick = () => {
         window.location.replace("/portal/edit/" + page.id);
     };
@@ -11,6 +13,7 @@ for (const page of pageEntries) {
         "button.delete"
     ) as HTMLButtonElement;
 
+    // Delete page
     deleteButton.onclick = () => {
         const data = new FormData();
         data.append("action", "DELETE");
