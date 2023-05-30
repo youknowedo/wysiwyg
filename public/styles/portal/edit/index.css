@@ -6,7 +6,6 @@
 #banner #tools {
     display: flex;
     justify-content: space-between;
-    padding: 0 1rem;
     flex: 1;
 }
 #tools > div {
@@ -124,7 +123,6 @@
     align-items: center;
     font-size: 11px;
     height: 2rem;
-    padding: 0 1rem;
     border: 1px solid transparent;
     cursor: pointer;
 }
@@ -207,13 +205,13 @@ div:has(> #page) {
     color: rgba(255, 255, 255, 0.85);
 }
 
-#editor > .right h1 {
+#editor > .right h2 {
     margin: 0;
-    padding: 1rem;
+    padding: 1rem 0;
     font-weight: bold;
     font-size: 1rem;
 }
-#editor > .right h2 {
+#editor > .right h3 {
     margin: 0;
     margin-bottom: 0.5rem;
     font-weight: normal;
@@ -222,8 +220,11 @@ div:has(> #page) {
     color: rgba(255, 255, 255, 0.5);
 }
 
-#editor > .right .subgroup {
+#editor > .right .group {
     padding: 0 1rem;
+}
+
+#editor > .right .subgroup {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;

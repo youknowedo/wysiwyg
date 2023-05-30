@@ -49,6 +49,7 @@ export const hierarchyOnLoad = (editMaster: EditMaster) => {
                                     justify: "flex-start",
                                 },
                             },
+                            backgroundColor: "#ffffff",
                         },
                     } as PageElement<"container">;
                     break;
@@ -60,9 +61,10 @@ export const hierarchyOnLoad = (editMaster: EditMaster) => {
                         tag: "p",
                         value: "Lorem ipsum...",
                     } as PageElement<"text">;
+                    break;
 
                 default:
-                    throw new Error("Element type not recognized");
+                    throw new Error("Element type not recognized " + item.id);
             }
 
             if (editMaster.selectedElement == undefined) {
@@ -117,7 +119,7 @@ const createHierarchyElement = (
 ) => {
     // Check if the element is of a valid type
     if (!elementIsText(element) && !elementIsContainer(element))
-        throw new Error("Element type not recognized");
+        throw new Error("Element type not recognized " + element);
 
     // Create the element
     const wrapper = document.createElement("div");

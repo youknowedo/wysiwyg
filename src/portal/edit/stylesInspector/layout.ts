@@ -113,7 +113,7 @@ const updateDirectionSettings = (
     }px`;
 };
 
-let alignJustifyMaster = {
+const alignJustifyMaster = {
     align: 0,
     justify: 0,
     options: [

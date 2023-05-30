@@ -101,9 +101,9 @@ if ($page == null) {
     <div class="right menu">
         <div id="stylesInspector">
             <div id="layout" class="group">
-                <h1>Layout</h1>
+                <h2>Layout</h2>
                 <div class="subgroup">
-                    <h2>Flex Items</h2>
+                    <h3>Flex Items</h3>
                     <div id="direction" class="item">
                         <span class="label">Direction</span>
                         <div class="input">
@@ -174,7 +174,6 @@ if ($page == null) {
                                 </button>
                             </div>
                         </div>
-
                     </div>
                     <div id="justify" class="item">
                         <span class="label">Justify</span>
@@ -218,6 +217,15 @@ if ($page == null) {
                                 </button>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+            <div id="background" class="group">
+                <h2>Background</h2>
+                <div class="item">
+                    <span class="label">Color</span>
+                    <div class="input">
+                        <input type="color" id="backgroundColor">
                     </div>
                 </div>
             </div>

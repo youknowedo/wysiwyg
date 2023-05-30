@@ -1,3 +1,4 @@
+import { BackgroundStyles } from "./stylesInspector/types/background";
 import { LayoutStyles } from "./stylesInspector/types/layout";
 
 export type Page = {
@@ -24,7 +25,8 @@ export interface PageElementType<S = {}> {
 export const elementIsContainer = (
     element: any
 ): element is PageElement<"container"> => element.type == "container";
-export interface PageElementContainer extends PageElementType<LayoutStyles> {
+export interface PageElementContainer
+    extends PageElementType<LayoutStyles & BackgroundStyles> {
     hierarchyOpen: boolean;
     children: AnyPageElement[];
 }

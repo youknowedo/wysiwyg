@@ -72,6 +72,7 @@ export const htmlToPageElement = (
                                 "flex-start",
                         },
                     },
+                    backgroundColor: html.style.backgroundColor || "",
                 },
             };
 
@@ -191,7 +192,7 @@ export const elementToHtml = <K extends keyof PageElementTypes>(
             editMaster.hoverElement = undefined;
             editMaster.selectedElement = element;
 
-            updateEditor("elementsOnly");
+            updateEditor("full");
         };
 
         if (element == editMaster.selectedElement)
@@ -227,6 +228,9 @@ export const elementToHtml = <K extends keyof PageElementTypes>(
         html.style.flexDirection = element.styles.layout.flexItems.direction;
         html.style.alignItems = element.styles.layout.flexItems.align;
         html.style.justifyContent = element.styles.layout.flexItems.justify;
+
+        // Add background styles
+        html.style.backgroundColor = element.styles.backgroundColor;
 
         return html;
     } else throw new Error("Element type wasn't recognized.");
