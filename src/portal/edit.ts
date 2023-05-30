@@ -80,7 +80,6 @@ const onLoad = () => {
     };
 
     doc.body.onclick = (e) => {
-        console.log("m");
         if (e.currentTarget != e.target) return;
 
         // If the user clicked on the body, deselect the selected element
