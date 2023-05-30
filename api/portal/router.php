@@ -1,10 +1,15 @@
 <?php
+// Start the PHP session
 session_start();
 
+// Get the MySQL connection
 $connection = require __DIR__ . "/../db.php";
+
+// Get the current session
 $r = $connection->query("SELECT * FROM w_sessions WHERE id='" . session_id() . "'");
 $session = $r->fetch_assoc();
 
+// If the session does not exist, create it
 if (!$session) {
     $r = $connection->query("INSERT INTO w_sessions (
                             id,
@@ -13,25 +18,29 @@ if (!$session) {
                             '" . session_id() . "',
                             NULL
                             )");
+    // Get the current session
+    $r = $connection->query("SELECT * FROM w_sessions WHERE id='" . session_id() . "'");
+    $session = $r->fetch_assoc();
 }
 
-$r = $connection->query("SELECT * FROM w_sessions WHERE id='" . session_id() . "'");
-$session = $r->fetch_assoc();
 
 if (!isset($session["username"]) && $path != "/portal/login") {
+    // If the user is not logged in and they're not on the login page, redirect to the login page
     header("Location:/portal/login");
     exit;
 } else if (isset($session["username"]) && $path == "/portal/login") {
+    // If the user is logged in and they're on the login page, redirect to the portal
     header("Location:/portal");
     exit;
 } else {
+    // If the user is trying to access the edit page, redirect to the edit home page
     if ($path == "/portal/edit") {
         header("Location:edit/home");
         exit;
     }
 
-
-    if ($_SERVER["REQUEST_METHOD"] === "GET") {
+    // If the request method is GET ot the withHTML parameter is true, include the HTML
+    if ($_SERVER["REQUEST_METHOD"] === "GET" || $_POST["withHTML"] == "true") {
         ?>
 
             <!DOCTYPE html>
@@ -43,10 +52,11 @@ if (!isset($session["username"]) && $path != "/portal/login") {
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <title>WYSIWYG Portal</title>
                 <link href="/styles/portal/index.css" type="text/css" rel="stylesheet">
-                <link href=<?php
-                if (str_starts_with($path, "/portal/edit"))
-                    echo '"/styles/portal/edit/index.css\"';
 
+                <link href=<?php
+                // If the path starts with /portal/edit, include the edit CSS
+                if (str_starts_with($path, "/portal/edit"))
+                    echo '"/styles/portal/edit/index.css"';
                 ?> type="text/css" rel="stylesheet">
             </head>
 
@@ -54,6 +64,7 @@ if (!isset($session["username"]) && $path != "/portal/login") {
             <?php
     }
 
+    // Include the right page depending on the path
     switch ($path) {
         case "/portal":
             include __DIR__ . "/portal.php";
@@ -78,8 +89,7 @@ if (!isset($session["username"]) && $path != "/portal/login") {
     }
 
 
-    if ($_SERVER["REQUEST_METHOD"] === "GET") {
-        ?>
+    if ($_SERVER["REQUEST_METHOD"] === "GET") { ?>
             </body>
 
             </html>

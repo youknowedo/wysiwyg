@@ -1,15 +1,15 @@
 <?php
 
-$is_invalid = false;
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    // Get the MySQL connection
     $connection = require __DIR__ . "/../db.php";
 
-    $sql = sprintf("SELECT * FROM w_users
-                    WHERE username = '%s'", $connection->real_escape_string($_POST["username"]));
-
-    $result = $connection->query($sql);
+    // Get the user from the database
+    $result = $connection->query("SELECT * FROM w_users
+                    WHERE username = '" . $connection->real_escape_string($_POST["username"]) . "'");
     $user = $result->fetch_assoc();
 
+    // If the user exists and the password is correct, update the username in the session
     if ($user) {
         if (password_verify($_POST["password"], $user["password_hash"])) {
             if (
@@ -30,10 +30,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 ?>
 <div>
-    <?php if ($is_invalid): ?>
+    <!-- If the login is invalid, display an error message -->
+    <?php if (isset($is_invalid)): ?>
         <em>Login Invalid</em>
     <?php endif; ?>
+
     <form method="post">
+        <input name="withHTML" value="true" hidden>
         <div>
             <label for="username">Username</label>
             <input type="text" id="username" name="username"

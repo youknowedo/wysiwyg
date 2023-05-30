@@ -80,6 +80,7 @@ if ($page == null) {
     exit;
 }
 
+// If all goes well, return the page
 ?>
 <!DOCTYPE html>
 <html lang="en">

@@ -1,52 +1,69 @@
 <?php
 
+// Get the MySQL connection
 $connection = require __DIR__ . "/../db.php";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    // If the action is CREATE, create a new user
     if ($_POST["action"] == "CREATE") {
+        // If the username is empty, return 400
         if (empty($_POST["slug"])) {
             http_response_code(400);
-            exit("Slug is required");
+            $err = "Slug is required";
         }
+
+        // If the title is empty, return 400
         if (empty($_POST["title"])) {
             http_response_code(400);
-            exit("Title is required");
+            $err = "Title is required";
         }
 
-
-        if (
-            $connection->query("INSERT INTO w_pages (slug,title,html)
+        // If there is no error, create the user
+        if (!isset($err)) {
+            // Insert the user into the database
+            if (
+                $connection->query("INSERT INTO w_pages (slug,title,html)
                                 VALUES ('" . $_POST["slug"] . "','" . $_POST["title"] . "','')")
-        )
-            echo "Page created";
-        else {
-            exit($connection->error . " " . $connection->errno);
+            ) {
+                header("Location:/portal/pages/");
+                exit;
+            } else {
+                $err = $connection->error . " [" . $connection->errno . "]";
+            }
         }
+    } else
+        // If the action is DELETE, delete the user
+        if ($_POST["action"] == "DELETE") {
+            // If the username is empty, return 400
+            if (empty($_POST["slug"])) {
+                http_response_code(400);
+                $err = "Slug is required";
+            }
 
-        header("Location:/portal/pages");
-        exit;
-    } else if ($_POST["action"] == "DELETE") {
-        if (empty($_POST["slug"])) {
-            http_response_code(400);
-            exit("Slug is required");
+            // If there is no error, delete the user
+            if (isset($err)) {
+                // Delete the user from the database
+                if (
+                    $connection->query("DELETE FROM w_pages WHERE slug='" . $_POST["slug"] . "'")
+                ) {
+                    header("Location:/portal/pages/");
+                    exit;
+                } else {
+                    $err = $connection->error . " " . $connection->errno;
+                }
+            }
         }
-
-        if (
-            $connection->query("DELETE FROM w_pages WHERE slug='" . $_POST["slug"] . "'")
-        )
-            echo "Slug deleted";
-        else {
-            exit($connection->error . " " . $connection->errno);
-        }
-    }
 }
 
 ?>
 
+<!-- Include the banner component -->
 <?php include __DIR__ . "/components/banner.php"; ?>
 
 <div>
+    <!-- Include the sidebar component -->
     <?php include __DIR__ . "/components/sidebar.php"; ?>
+
     <div id="content">
         <div id="list">
             <?php
@@ -55,9 +72,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             $result = $connection->query("SELECT * FROM w_pages");
 
-            while ($page = $result->fetch_assoc()) {
-                ?>
-
+            while ($page = $result->fetch_assoc()) { ?>
                 <div id="<?= $page["slug"] ?>">
                     <div>
                         <h3>
@@ -72,27 +87,33 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                         <button class="delete">Delete</button>
                     </div>
                 </div>
-
-                <?php
-            }
-
-            ?>
+            <?php } ?>
         </div>
 
-        <form method="post" id="newListItem">
-            <input name="action" value="CREATE" hidden>
-            <div>
-                <label for="slug">Slug</label>
-                <input type="text" id="slug" name="slug">
-            </div>
+        <div>
+            <form method="post" id="newListItem">
+                <input name="action" value="CREATE" hidden>
+                <input name="withHTML" value="true" hidden>
+                <div>
+                    <label for="slug">Slug</label>
+                    <input type="text" id="slug" name="slug">
+                </div>
 
-            <div>
-                <label for="title">Title</label>
-                <input type="text" id="title" name="title">
-            </div>
+                <div>
+                    <label for="title">Title</label>
+                    <input type="text" id="title" name="title">
+                </div>
 
-            <button type="submit">Create Page</button>
-        </form>
+                <button type="submit">Create Page</button>
+            </form>
+
+            <!-- If there is an error, display it -->
+            <?php if (isset($err)) { ?>
+                <div id="error">
+                    <?= $err ?>
+                </div>
+            <?php } ?>
+        </div>
 
     </div>
 </div>
