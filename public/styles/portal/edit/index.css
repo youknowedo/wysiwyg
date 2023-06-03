@@ -1,10 +1,19 @@
-#banner > #tools {
+/*#region banner*/
+#banner > div {
+    padding: 0;
+}
+
+#banner #tools {
     display: flex;
     justify-content: space-between;
-    padding: 0 1rem;
     flex: 1;
 }
-#banner > #tools #saveButton {
+#tools > div {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+#banner #tools #saveButton {
     background-color: var(--purple);
     border: 2px solid var(--purple);
     color: white;
@@ -12,25 +21,27 @@
     border-radius: 4px;
     cursor: pointer;
 }
-#banner > #tools #saveButton:active,
-#banner > #tools #saveButton:disabled {
+#banner #tools #saveButton:active,
+#banner #tools #saveButton:disabled {
     background-color: var(--grey);
     border: 2px solid var(--light-grey);
     color: rgba(255, 255, 255, 0.3);
 }
-#banner > #tools #saveButton::after {
+#banner #tools #saveButton::after {
     content: "e";
 }
-#banner > #tools #saveButton:active::after,
-#banner > #tools #saveButton:disabled::after {
+#banner #tools #saveButton:active::after,
+#banner #tools #saveButton:disabled::after {
     content: "ing...";
 }
 
-#banner > #modeSelector {
+#modeSelector {
     width: 200px;
+    display: flex;
+    align-items: center;
 }
 
-#banner > #modeSelector::before {
+#modeSelector::before {
     content: "";
     display: block;
     height: 25px;
@@ -38,88 +49,142 @@
     background-color: var(--light-grey);
 }
 
+#modeSelector > .horizontalMenu {
+    margin: 0 1rem;
+}
+
+/*#endregion*/
+
 #editor {
     display: flex;
-}
-
-.menu {
-    height: calc(100vh - 50px);
-    width: 200px;
-
-    background-color: var(--dark);
-}
-
-#editor > .left {
     color: white;
 }
 
-#editor > .left div {
-    padding: 0 0.5rem;
-    margin-top: 0.25rem;
-    margin-left: 0.5rem;
-    display: inline-block;
+/*#region Hierarchy*/
+#editor > .left .toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--light-grey);
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 0.5rem 1rem;
 }
 
-#editor > .left div[wysiwyg="container"] {
+#editor > .left .toolbar > button {
     position: relative;
-    padding-bottom: 1rem;
-    margin-bottom: 0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 3px;
+    padding: 4px 6px;
+    background-color: var(--grey);
+    border: 0;
+    border-radius: 4px;
+    fill: white;
+    cursor: pointer;
 }
-
-#editor > .left div[wysiwyg="container"]::after {
-    content: "";
-    position: absolute;
-    top: 2.25rem;
-    bottom: 0;
-    left: 1rem;
-    width: 0.25rem;
-
-    border-left: 1px solid rgba(255, 255, 255, 0.25);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.25);
-}
-
-#editor > .left div[wysiwyg="container"] .newButton {
-    position: absolute;
-    bottom: 0;
-    left: 1.5rem;
+#editor > .left .toolbar > button:not(.open):hover {
     background-color: var(--light-grey);
-    height: 1rem;
-    width: 1rem;
-    translate: 0 50%;
-    text-align: center;
+}
+#editor > .left .toolbar > button > .arrow {
+    rotate: 180deg;
+}
+
+#editor > .left .toolbar > button :has(.hoverMenu) {
+    display: none;
+}
+#editor > .left .toolbar > button.open :has(> .hoverMenu) {
+    padding-top: 0.25rem;
+    display: block;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    translate: 0 100%;
+}
+#editor > .left .toolbar > button .hoverMenu {
+    background-color: var(--grey);
+    border: 1px solid var(--light-grey);
+    border-radius: 2px;
+    color: white;
+    font-size: 11px;
+}
+#editor > .left .toolbar > button .hoverMenu > span {
+    display: block;
+    text-align: left;
+    padding: 0.5rem 1rem;
+}
+#editor > .left .toolbar > button .hoverMenu > span:hover {
+    background-color: var(--light-grey);
+}
+
+#editor > .left div[wysiwyg] span {
     display: flex;
     align-items: center;
-    justify-content: center;
-    border-radius: 4px;
-    color: rgba(255, 255, 255, 0.5);
+    font-size: 11px;
+    height: 2rem;
+    border: 1px solid transparent;
+    cursor: pointer;
+}
+
+#editor > .left div[wysiwyg="container"] > span > .arrow {
+    display: none;
+}
+#editor > .left:hover div[wysiwyg="container"] > span > .arrow {
+    display: flex;
+    align-items: center;
+}
+#editor > .left div[wysiwyg="container"] > span > .arrow > svg {
+    fill: rgba(255, 255, 255, 0.5);
+    margin-left: -0.75rem;
+    rotate: 180deg;
+}
+#editor > .left div[wysiwyg="container"].close > span > .arrow > svg {
+    rotate: 90deg;
+}
+#editor > .left div[wysiwyg="container"].close > div {
+    display: none;
+}
+#editor > .left div[wysiwyg="container"] > span:not(:only-child) {
+    font-weight: bold;
+}
+#editor > .left div[wysiwyg="container"] > span:only-child > .arrow {
+    display: none;
+}
+
+#editor > .left div[wysiwyg] > span > .actions {
+    flex: 1;
+    display: none;
+    justify-content: end;
+    align-items: center;
+}
+#editor > .left div[wysiwyg] > span.selected > .actions,
+#editor > .left div[wysiwyg] > span.hover > .actions {
+    display: flex;
+}
+#editor > .left div[wysiwyg] > span > .actions button {
+    background-color: transparent;
     border: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#editor > .left div[wysiwyg] > span > .actions button > svg {
+    fill: white;
 }
 
-#editor > .left div[wysiwyg="container"] .newButton:hover {
-    color: white;
-    cursor: pointer;
+#editor > .left div[wysiwyg] span.hover {
+    border-color: var(--purple);
 }
-
-#editor > .left div > span {
-    display: block;
-    width: 4rem;
-    font-size: 0.75rem;
+#editor > .left div:has(> span.selected) > div {
     background-color: var(--grey);
-    padding: 0.5rem 0.75rem;
-    border-radius: 4px;
 }
-#editor > .left div.isElement > span {
-    cursor: pointer;
-}
-#editor > .left div.isElement > span.hover {
+#editor > .left span.selected {
     background-color: var(--light-grey);
 }
-#editor > .left div:not(.isElement) > span {
-    cursor: default;
-}
-#editor > .left span.chosen {
-    background-color: var(--purple);
-}
+
+/*#endregion*/
 
 div:has(> #page) {
     padding: 1rem;
@@ -133,4 +198,96 @@ div:has(> #page) {
     border: 1 solid var(--sb-blue);
     border-radius: 1rem;
     background-color: white;
+}
+
+#editor > .right {
+    padding: 0;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+#editor > .right h2 {
+    margin: 0;
+    padding: 1rem 0;
+    font-weight: bold;
+    font-size: 1rem;
+}
+#editor > .right h3 {
+    margin: 0;
+    margin-bottom: 0.5rem;
+    font-weight: normal;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+#editor > .right .group {
+    padding: 0 1rem;
+}
+
+#editor > .right .subgroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+#stylesInspector .item {
+    display: flex;
+    align-items: center;
+}
+#stylesInspector .item > span.label {
+    font-size: 0.75rem;
+    width: 4rem;
+}
+#stylesInspector .item > .input {
+    flex: 1;
+    display: flex;
+    gap: 0.25rem;
+}
+#stylesInspector .item > .input > button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--grey);
+    padding: 0.25rem 0.5rem;
+    border: 1px solid var(--light-grey);
+    border-radius: 4px;
+    color: rgba(255, 255, 255, 0.5);
+    fill: rgba(255, 255, 255, 0.5);
+}
+
+#directionInvert.inverted {
+    fill: white !important;
+}
+
+.horizontalMenu {
+    flex: 1;
+    position: relative;
+    display: flex;
+    background-color: var(--grey);
+    padding: 0.1rem;
+    border: 1px solid var(--light-grey);
+    border-radius: 4px;
+    color: var(--light-grey);
+}
+
+.horizontalMenu > .highlight {
+    z-index: 0;
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.25);
+    border-radius: 4px;
+    transition-duration: 200ms;
+}
+
+.horizontalMenu button {
+    z-index: 1;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+    padding: 0.25rem 0;
+    border: 0;
+    color: white;
+    fill: white;
+    font-size: 0.75rem;
 }

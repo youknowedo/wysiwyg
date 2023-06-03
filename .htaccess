@@ -1,2 +1,4 @@
+SetEnv DB_USER i55mdzk2p1wc37kiyol7
+SetEnv DB_PWD pscale_pw_g90hvxzUwuZK2RjRhqZ2sfdOycnZ05wOjPAmaY5vCSG
 RewriteEngine on
 RewriteRule . api/router.php [L]

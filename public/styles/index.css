@@ -1,0 +1,7 @@
+* {
+    all: reset;
+}
+
+[wysiwyg="container"] {
+    display: flex;
+}

@@ -6,5 +6,8 @@
         "dev": "nodemon --watch \"src/**/*\" -e \"ts\" --exec \"npx tsc\""
     },
     "author": "",
-    "license": "MIT"
+    "license": "MIT",
+    "dependencies": {
+        "nodemon": "^2.0.22"
+    }
 }
