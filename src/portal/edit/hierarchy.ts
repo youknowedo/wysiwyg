@@ -50,6 +50,9 @@ export const hierarchyOnLoad = (editMaster: EditMaster) => {
                                 },
                             },
                             backgroundColor: "#ffffff",
+                            position: {
+                                type: "relative",
+                            },
                         },
                     } as PageElement<"container">;
                     break;

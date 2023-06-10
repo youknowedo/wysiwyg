@@ -229,6 +229,22 @@ if ($page == null) {
                     </div>
                 </div>
             </div>
+            <div id="position" class="group">
+                <h2>Position</h2>
+                <span class="item">
+                    <div id="positionType" class="input">
+                        <div class="horizontalMenu">
+                            <div class="highlight"></div>
+                            <button class="selected">
+                                Relative
+                            </button>
+                            <button>
+                                Absolute
+                            </button>
+                        </div>
+                    </div>
+                </span>
+            </div>
         </div>
     </div>
 </div>

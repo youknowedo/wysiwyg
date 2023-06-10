@@ -2,6 +2,10 @@
     all: reset;
 }
 
+body {
+    margin: 0;
+}
+
 [wysiwyg="container"] {
     display: flex;
 }

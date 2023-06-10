@@ -1,5 +1,6 @@
 import { BackgroundStyles } from "./stylesInspector/types/background";
 import { LayoutStyles } from "./stylesInspector/types/layout";
+import { PositionStyles } from "./stylesInspector/types/position";
 
 export type Page = {
     body: AnyPageElement[];
@@ -26,7 +27,7 @@ export const elementIsContainer = (
     element: any
 ): element is PageElement<"container"> => element.type == "container";
 export interface PageElementContainer
-    extends PageElementType<LayoutStyles & BackgroundStyles> {
+    extends PageElementType<LayoutStyles & BackgroundStyles & PositionStyles> {
     hierarchyOpen: boolean;
     children: AnyPageElement[];
 }
@@ -34,7 +35,7 @@ export interface PageElementContainer
 export const elementIsText = (element: any): element is PageElement<"text"> =>
     element.type == "text";
 export type PageElementTextTag = "p" | "h1" | "h2" | "h3" | "h4";
-export interface PageElementText extends PageElementType {
+export interface PageElementText extends PageElementType<PositionStyles> {
     tag: PageElementTextTag;
     value: string;
 }

@@ -35,7 +35,7 @@ const directionMaster = {
 };
 
 export const hasLayoutStyles = (styles: any): styles is LayoutStyles =>
-    styles?.layout != undefined;
+    styles && styles.layout != undefined;
 
 // Update direction settings
 const updateDirectionSettings = (
@@ -68,7 +68,7 @@ const updateDirectionSettings = (
             styles.layout.flexItems.direction =
                 directionMaster.options[+directionMaster.inverted][i];
 
-            editMaster.selectedElement.styles = styles;
+            editMaster.selectedElement.styles = styles as any;
 
             updateEditor("full");
         };
@@ -88,7 +88,7 @@ const updateDirectionSettings = (
             ];
 
         // Set the styles
-        editMaster.selectedElement.styles = styles;
+        editMaster.selectedElement.styles = styles as any;
 
         // Add or remove the inverted class
         if (directionMaster.inverted) {
@@ -163,17 +163,15 @@ const updateAlignJustifySettings = (
         const option = alignJustifyMaster.elements[type].options[i];
 
         option.onclick = () => {
-            if (hasLayoutStyles(styles)) {
-                if (editMaster.selectedElement == undefined)
-                    throw new Error("No selected element");
+            if (editMaster.selectedElement == undefined)
+                throw new Error("No selected element");
 
-                // Set the align or justify to the option that was clicked
-                styles.layout.flexItems[type] = alignJustifyMaster.options[i];
+            // Set the align or justify to the option that was clicked
+            styles.layout.flexItems[type] = alignJustifyMaster.options[i];
 
-                editMaster.selectedElement.styles = styles;
+            editMaster.selectedElement.styles = styles as any;
 
-                updateEditor("full");
-            }
+            updateEditor("full");
         };
     }
 

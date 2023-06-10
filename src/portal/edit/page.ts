@@ -12,6 +12,7 @@ import {
     FlexAlignJustify,
     FlexDirection,
 } from "./stylesInspector/types/layout.js";
+import { Position } from "./stylesInspector/types/position.js";
 
 // Converts an HTML string to a Page object
 export const htmlToPage = (html: string): Page => {
@@ -47,7 +48,11 @@ export const htmlToPageElement = (
                 id: html.id,
                 tag: html.tagName.toLowerCase() as PageElementTextTag,
                 value: html.innerHTML,
-                styles: {},
+                styles: {
+                    position: {
+                        type: (html.style.position as Position) || "relative",
+                    },
+                },
             } as PageElement<"text">;
 
         case "container":
@@ -73,6 +78,9 @@ export const htmlToPageElement = (
                         },
                     },
                     backgroundColor: html.style.backgroundColor || "",
+                    position: {
+                        type: (html.style.position as Position) || "relative",
+                    },
                 },
             };
 
@@ -173,6 +181,9 @@ export const elementToHtml = <K extends keyof PageElementTypes>(
             }
         }
 
+        // Add position styles
+        html.style.position = element.styles.position.type;
+
         return html;
     } else if (elementIsContainer(element)) {
         // Create the HTML element
@@ -231,6 +242,9 @@ export const elementToHtml = <K extends keyof PageElementTypes>(
 
         // Add background styles
         html.style.backgroundColor = element.styles.backgroundColor;
+
+        // Add position styles
+        html.style.position = element.styles.position.type;
 
         return html;
     } else throw new Error("Element type wasn't recognized.");

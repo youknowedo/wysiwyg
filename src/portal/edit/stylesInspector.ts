@@ -1,4 +1,4 @@
-import { EditMaster, updateEditor } from "../edit.js";
+import { EditMaster } from "../edit.js";
 import {
     hasBackgroundStyles,
     updateBackgroundSettings,
@@ -7,9 +7,14 @@ import {
     hasLayoutStyles,
     updateLayoutSettings,
 } from "./stylesInspector/layout.js";
+import {
+    hasPositionStyles,
+    updatePositionSettings,
+} from "./stylesInspector/position.js";
 
 const layoutSettings = document.getElementById("layout") as HTMLElement;
 const backgroundSettings = document.getElementById("background") as HTMLElement;
+const positionSettings = document.getElementById("position") as HTMLElement;
 
 export const updateStylesInspector = (editMaster: EditMaster) => {
     let styles = editMaster.selectedElement?.styles;
@@ -25,4 +30,10 @@ export const updateStylesInspector = (editMaster: EditMaster) => {
         backgroundSettings.style.display = "block";
         updateBackgroundSettings(styles);
     } else backgroundSettings.style.display = "none";
+
+    // Update the position settings if the selected element has position styles
+    if (hasPositionStyles(styles)) {
+        positionSettings.style.display = "block";
+        updatePositionSettings(styles, editMaster);
+    } else positionSettings.style.display = "none";
 };
